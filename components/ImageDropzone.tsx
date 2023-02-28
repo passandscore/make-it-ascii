@@ -6,27 +6,16 @@ import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 export function ImageDropzone({
   handleDrop,
   imageUrl,
-  setImageUrl,
   width,
+  handleReset,
 }: {
   handleDrop: (files: File[]) => void;
   imageUrl: string;
-  setImageUrl: (url: string) => void;
   width: number;
+  handleReset: () => void;
 }) {
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);
-
-  const handleSelectFile = (e: any) => {
-    if (e.target.innerText === 'Reset') {
-      setImageUrl('');
-      return;
-    }
-
-    if (openRef.current) {
-      openRef.current();
-    }
-  };
 
   const handleButtonSize = (): MantineSize => {
     if (width < 600) {
@@ -53,7 +42,7 @@ export function ImageDropzone({
           maxSize={3 * 1024 ** 2}
           accept={IMAGE_MIME_TYPE}
         >
-          <Group position="center" spacing="xl" style={{ minHeight: 220, pointerEvents: 'none' }}>
+          <Group position="center" spacing="xl" style={{ minHeight: 75, pointerEvents: 'none' }}>
             <Dropzone.Accept>
               <IconUpload
                 size={50}
@@ -81,19 +70,21 @@ export function ImageDropzone({
         </Dropzone>
       )}
 
-      <Group position="center" mt="md">
-        <Button
-          onClick={(e) => handleSelectFile(e)}
-          variant="outline"
-          color="teal"
-          size={handleButtonSize()}
-          mt="xl"
-          mx="auto"
-          display="block"
-        >
-          {(imageUrl && 'Reset') || 'Select file'}
-        </Button>
-      </Group>
+      {imageUrl && (
+        <Group position="center" mt="md">
+          <Button
+            onClick={handleReset}
+            variant="outline"
+            color="teal"
+            size={handleButtonSize()}
+            mt="xl"
+            mx="auto"
+            display="block"
+          >
+            Reset
+          </Button>
+        </Group>
+      )}
     </>
   );
 }

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-const AsciiImage = (props: { columns?: number; src: string }) => {
+const AsciiImage = (props: { columns?: number; src: string; selectedColor?: string }) => {
   const [asciiChars, setAsciiChars] = useState([] as string[]);
-  const map = '@#%*+=-:. ';
+  // const map = '@#%*+=-:. ';
+  const map = ' .:-=+*#%@|';
 
   const resolutionY = 0.6;
   const columns = props.columns || 80;
@@ -37,7 +38,7 @@ const AsciiImage = (props: { columns?: number; src: string }) => {
     if (props.src) {
       convertToAscii(props.src);
     }
-  }, [props.columns]);
+  }, [props.columns, props.selectedColor]);
 
   const ascii = () => asciiChars.join('');
 
@@ -54,6 +55,7 @@ const AsciiImage = (props: { columns?: number; src: string }) => {
         pre {
           font-weight: bold;
           line-height: 0.95em;
+          color: ${props.selectedColor || 'white'};
         }
         `}
       </style>
