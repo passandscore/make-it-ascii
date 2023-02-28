@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 const AsciiImage = (props: { columns?: number; src: string }) => {
   const [asciiChars, setAsciiChars] = useState([] as string[]);
   const map = '@#%*+=-:. ';
+
   const resolutionY = 0.6;
   const columns = props.columns || 80;
 
@@ -36,12 +37,18 @@ const AsciiImage = (props: { columns?: number; src: string }) => {
     if (props.src) {
       convertToAscii(props.src);
     }
-  }, []);
+  }, [props.columns]);
 
   const ascii = () => asciiChars.join('');
 
   return (
-    <div>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <style>
         {`
         pre {
