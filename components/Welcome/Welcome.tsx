@@ -1,25 +1,47 @@
-import { Title, Text, Anchor } from '@mantine/core';
+import React, { useState } from 'react';
+import { Title, Text, Container } from '@mantine/core';
+import { ImageDropzone } from '../ImageDropzone';
 import useStyles from './Welcome.styles';
+import AsciiImage from '../AsciiImage';
+import { ColorSchemeToggle } from '../ColorSchemeToggle/ColorSchemeToggle';
 
 export function Welcome() {
+  const [imageUrl, setImageUrl] = useState('');
+
   const { classes } = useStyles();
+
+  const handleDrop = (files: File[]) => {
+    const file = files[0];
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const link = URL.createObjectURL(files[0]);
+      setImageUrl(link);
+    };
+    reader.readAsDataURL(file);
+  };
 
   return (
     <>
       <Title className={classes.title} align="center" mt={100}>
-        Welcome to{' '}
+        Make it{' '}
         <Text inherit variant="gradient" component="span">
-          Mantine
+          ASCII
         </Text>
       </Title>
       <Text color="dimmed" align="center" size="lg" sx={{ maxWidth: 580 }} mx="auto" mt="xl">
-        This starter Next.js project includes a minimal setup for server side rendering, if you want
-        to learn more on Mantine + Next.js integration follow{' '}
-        <Anchor href="https://mantine.dev/guides/next/" size="lg">
-          this guide
-        </Anchor>
-        . To get started edit index.tsx file.
+        Just provide an image and watch as it is converted to ASCII art.
       </Text>
+
+      <Container size="xs" mt="xl">
+        <ImageDropzone onDrop={handleDrop} />
+      </Container>
+
+      {imageUrl && (
+        <Container size="sm" mt="xl">
+          <AsciiImage src={imageUrl} />
+        </Container>
+      )}
     </>
   );
 }
