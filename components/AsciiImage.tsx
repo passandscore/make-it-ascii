@@ -1,39 +1,35 @@
 import React, { useEffect, useState } from 'react';
 
-const AsciiImage = (props) => {
-  console.log('AsciiImage', props);
-  const [asciiChars, setAsciiChars] = useState([]);
+const AsciiImage = (props: { columns?: number; src: string }) => {
+  const [asciiChars, setAsciiChars] = useState([] as string[]);
   const map = '@#%*+=-:. ';
   const resolutionY = 0.6;
   const columns = props.columns || 80;
 
-  const convertToAscii = (url) => {
-    console.log('convertToAscii', url);
-    let image = new Image();
+  const convertToAscii = (url: string) => {
+    const image = new Image();
     image.setAttribute('crossOrigin', 'anonymous');
-    image.onload = function () {
-      let canvas = document.createElement('canvas');
-      let ctx = canvas.getContext('2d');
-      let ratio = image.width / image.height;
+    image.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const ratio = image.width / image.height;
       canvas.width = columns;
       canvas.height = (columns / ratio) * resolutionY;
-      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-      let data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      ctx?.drawImage(image, 0, 0, canvas.width, canvas.height);
+      const { data } = ctx && (ctx.getImageData(0, 0, canvas.width, canvas.height) as any);
       for (let i = 0; i < data.length; i += 4) {
-        let brightness = 0.34 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2];
+        const brightness = 0.34 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2];
         data[i] = brightness;
       }
-      let newAsciiChars = [];
+      const newAsciiChars = [];
       for (let i = 0; i < data.length; i += 4) {
-        let rchar = map[Math.round(((map.length - 1) * data[i]) / 255)];
+        const rchar = map[Math.round(((map.length - 1) * data[i]) / 255)];
         newAsciiChars.push(rchar);
-        if (Math.ceil((i + 1) / 4) % columns == 0) newAsciiChars.push('\n');
+        if (Math.ceil((i + 1) / 4) % columns === 0) newAsciiChars.push('\n');
       }
       setAsciiChars(newAsciiChars);
     };
     image.src = url;
-
-    console.log('image', image);
   };
 
   useEffect(() => {

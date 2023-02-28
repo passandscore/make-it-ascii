@@ -3,7 +3,6 @@ import { Title, Text, Container } from '@mantine/core';
 import { ImageDropzone } from '../ImageDropzone';
 import useStyles from './Welcome.styles';
 import AsciiImage from '../AsciiImage';
-import { ColorSchemeToggle } from '../ColorSchemeToggle/ColorSchemeToggle';
 
 export function Welcome() {
   const [imageUrl, setImageUrl] = useState('');
@@ -34,7 +33,7 @@ export function Welcome() {
       </Text>
 
       <Container size="xs" mt="xl">
-        <ImageDropzone onDrop={handleDrop} />
+        <ImageDropzone handleDrop={handleDrop} />
       </Container>
 
       {imageUrl && (

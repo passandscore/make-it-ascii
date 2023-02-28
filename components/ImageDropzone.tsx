@@ -1,20 +1,24 @@
 import { useRef } from 'react';
 import { Button, Group, Text, useMantineTheme } from '@mantine/core';
 import { IconUpload, IconPhoto, IconX } from '@tabler/icons';
-import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from '@mantine/dropzone';
+import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 
-export function ImageDropzone(props: Partial<DropzoneProps>) {
+export function ImageDropzone({ handleDrop }: { handleDrop: (files: File[]) => void }) {
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);
+
+  const handleSelectFile = () => {
+    if (openRef.current) {
+      openRef.current();
+    }
+  };
   return (
     <>
       <Dropzone
         openRef={openRef}
-        onDrop={(files) => console.log('accepted files', files)}
-        onReject={(files) => console.log('rejected files', files)}
+        onDrop={(files) => handleDrop(files)}
         maxSize={3 * 1024 ** 2}
         accept={IMAGE_MIME_TYPE}
-        {...props}
       >
         <Group position="center" spacing="xl" style={{ minHeight: 220, pointerEvents: 'none' }}>
           <Dropzone.Accept>
@@ -44,7 +48,7 @@ export function ImageDropzone(props: Partial<DropzoneProps>) {
       </Dropzone>
       <Group position="center" mt="md">
         <Button
-          onClick={() => openRef.current()}
+          onClick={handleSelectFile}
           variant="outline"
           color="teal"
           size="lg"
