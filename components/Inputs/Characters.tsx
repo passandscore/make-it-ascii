@@ -9,7 +9,7 @@ export const Characters = ({
 }) => (
   <TextInput
     placeholder=" .:-= +*#%@|"
-    label="Custom ASCII Characters"
+    defaultValue=" .:-= +*#%@|"
     value={selectedChars}
     onChange={(e) => setSelectedChars(e.currentTarget.value)}
   />

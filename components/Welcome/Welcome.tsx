@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import { Title, Text, Container, Badge, Flex, Slider } from '@mantine/core';
+import React, { useState, useRef } from 'react';
+import { Title, Text, Container, Badge, Flex, Slider, Button, Switch } from '@mantine/core';
+import { IconPhoto, Icon123 } from '@tabler/icons';
+import { showNotification } from '@mantine/notifications';
+import html2canvas from 'html2canvas';
 import { Fade } from 'react-awesome-reveal';
 import { ImageDropzone } from '../ImageDropzone';
 import useStyles from './Welcome.styles';
@@ -12,15 +15,18 @@ export function Welcome() {
   const [showColors, setShowColors] = useState(false);
   const [showCharacterInput, setShowCharacterInput] = useState(false);
   const [showFontSize, setShowFontSize] = useState(false);
+  const [showDownloadOptions, setShowDownloadOptions] = useState(false);
   const [selectedColor, setSelectedColor] = useState('');
-  const [selectedChars, setSelectedChars] = useState('');
+  const [selectedChars, setSelectedChars] = useState(' .:-= +*#%@|');
   const [selectedFontSize, setSelectedFontSize] = useState(14);
   const [selectedFontWeight, setSelectedFontWeight] = useState('bold');
+  const [backgroundState, setBackgroundState] = useState('transparent');
 
   const selectedFontDefaultValue =
     Number(((Number(selectedFontSize - 8) * 100) / 8).toFixed(2)) || 14;
 
   const { classes } = useStyles();
+  const asciiRef = useRef<HTMLDivElement>(null);
 
   const handleReset = () => {
     setImageUrl('');
@@ -30,6 +36,7 @@ export function Welcome() {
     setShowCharacterInput(false);
     setShowColors(false);
     setShowFontSize(false);
+    setShowDownloadOptions(false);
   };
 
   const handleDrop = (files: File[]) => {
@@ -41,6 +48,67 @@ export function Welcome() {
       setImageUrl(link);
     };
     reader.readAsDataURL(file);
+  };
+
+  const downloadContentAsText = () => {
+    const asciiContent = asciiRef && asciiRef?.current?.innerText;
+
+    const fileName = 'ascii.txt';
+    const blob = new Blob([asciiContent!], { type: 'text/plain' });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.click();
+    URL.revokeObjectURL(url);
+
+    showNotification({
+      title: 'Make it ASCII 😎',
+      message: 'Downloaded as text',
+    });
+  };
+
+  const downloadContentToImage = () => {
+    // Capture the content to be downloaded
+    const asciiContent = asciiRef && asciiRef?.current;
+
+    // Determine the height of the content
+    const height = asciiContent?.offsetHeight;
+
+    // Use html2canvas to render the content as an image
+    html2canvas(asciiContent!, { height }).then((canvas) => {
+      // Create a new canvas with the same dimensions as the content canvas
+      const finalCanvas = document.createElement('canvas');
+      finalCanvas.width = canvas.width;
+      finalCanvas.height = canvas.height;
+
+      // Draw the image on the final canvas at the center
+      const ctx = finalCanvas.getContext('2d');
+      ctx?.drawImage(
+        canvas,
+        (finalCanvas.width - canvas.width) / 2,
+        (finalCanvas.height - canvas.height) / 2
+      );
+
+      // Convert the final canvas to a data URL
+      const dataURL = finalCanvas.toDataURL();
+
+      // Create a download link for the image
+      const link = document.createElement('a');
+      link.download = 'download.png';
+      link.href = dataURL;
+
+      // Click the download link to initiate the download
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    showNotification({
+      title: 'Make it ASCII 😎',
+      message: 'Downloaded as an image',
+    });
   };
 
   return (
@@ -74,7 +142,58 @@ export function Welcome() {
           )}
 
           {showCharacterInput && (
-            <Characters setSelectedChars={setSelectedChars} selectedChars={selectedChars} />
+            <Flex justify="center" align="center">
+              <Characters setSelectedChars={setSelectedChars} selectedChars={selectedChars} />
+              <Switch
+                ml={20}
+                label="Add Background"
+                onChange={() => {
+                  const currentChars = selectedChars.split('');
+                  if (backgroundState === 'transparent') {
+                    setBackgroundState('visible');
+                    currentChars.shift();
+                  } else {
+                    setBackgroundState('transparent');
+                    currentChars.unshift(' ');
+                  }
+                  const newChars = currentChars.join('');
+                  setSelectedChars(newChars);
+                }}
+              />
+            </Flex>
+          )}
+
+          {showDownloadOptions && (
+            <>
+              <Button
+                variant="light"
+                rightIcon={<IconPhoto size={20} stroke={1.5} />}
+                radius="xl"
+                size="md"
+                mx={20}
+                styles={{
+                  root: { paddingRight: 14, height: 48 },
+                  rightIcon: { marginLeft: 22 },
+                }}
+                onClick={downloadContentToImage}
+              >
+                Save as image
+              </Button>
+
+              <Button
+                variant="light"
+                rightIcon={<Icon123 size={20} stroke={1.5} />}
+                radius="xl"
+                size="md"
+                styles={{
+                  root: { paddingRight: 14, height: 48 },
+                  rightIcon: { marginLeft: 22 },
+                }}
+                onClick={downloadContentAsText}
+              >
+                Save as text
+              </Button>
+            </>
           )}
         </Flex>
       )}
@@ -114,6 +233,7 @@ export function Welcome() {
               onClick={() => {
                 setShowCharacterInput(false);
                 setShowFontSize(false);
+                setShowDownloadOptions(false);
                 setShowColors(!showColors);
               }}
               style={{
@@ -134,6 +254,7 @@ export function Welcome() {
               onClick={() => {
                 setShowColors(false);
                 setShowFontSize(false);
+                setShowDownloadOptions(false);
                 setShowCharacterInput(!showCharacterInput);
               }}
               style={{
@@ -152,6 +273,7 @@ export function Welcome() {
               onClick={() => {
                 setShowColors(false);
                 setShowCharacterInput(false);
+                setShowDownloadOptions(false);
                 setShowFontSize(true);
               }}
               style={{
@@ -171,6 +293,7 @@ export function Welcome() {
                 setShowColors(false);
                 setShowCharacterInput(false);
                 setShowFontSize(false);
+                setShowDownloadOptions(false);
                 selectedFontWeight === 'normal'
                   ? setSelectedFontWeight('bold')
                   : setSelectedFontWeight('normal');
@@ -180,25 +303,29 @@ export function Welcome() {
                 fontWeight: selectedFontWeight === 'normal' ? 'normal' : 'bold',
               }}
             >
-              {' '}
               weight
             </Badge>
 
-            {/* copy */}
+            {/* download */}
             <Badge
               variant="outline"
               size="lg"
               mt={10}
               mx={10}
+              // onClick={downloadContent}
+              // onClick={downloadContentToImage}
               onClick={() => {
                 setShowColors(false);
-                setShowCharacterInput(!showCharacterInput);
+                setShowFontSize(false);
+                setShowDownloadOptions(false);
+                setShowCharacterInput(false);
+                setShowDownloadOptions(!showDownloadOptions);
               }}
               style={{
                 cursor: 'pointer',
               }}
             >
-              copy
+              download
             </Badge>
 
             {/* reset */}
@@ -238,6 +365,7 @@ export function Welcome() {
               selectedChars={selectedChars}
               selectedFontSize={String(selectedFontSize)}
               selectedFontWeight={selectedFontWeight}
+              asciiRef={asciiRef}
             />
           </Container>
         </Fade>

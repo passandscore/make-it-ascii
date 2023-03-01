@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useEffect, useState } from 'react';
 
 const AsciiImage = (props: {
@@ -6,10 +8,11 @@ const AsciiImage = (props: {
   selectedChars?: string;
   selectedFontSize?: string;
   selectedFontWeight?: string;
+  asciiRef?: any;
 }) => {
   const [asciiChars, setAsciiChars] = useState([] as string[]);
-  const map = props.selectedChars || ' .:-=+*#%@|';
 
+  const map = props.selectedChars || ' .:-=+*#%@|';
   const resolutionY = 0.6;
   const columns = 70;
 
@@ -49,6 +52,7 @@ const AsciiImage = (props: {
 
   return (
     <div
+      ref={props.asciiRef}
       style={{
         display: 'flex',
         justifyContent: 'center',
@@ -59,6 +63,7 @@ const AsciiImage = (props: {
       <style>
         {`
         pre {
+          border: 1px solid transparent;
           font-weight: ${props.selectedFontWeight};
           line-height: 0.95em;
           color: ${props.selectedColor || 'white'};
