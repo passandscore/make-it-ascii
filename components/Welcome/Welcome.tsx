@@ -20,6 +20,7 @@ import DownloadButtons from '../Download/DownloadOptions';
 import { downloadContentToImage, downloadContentAsText } from '../Download/downloadLogic';
 import FontSizeBadge from '../FontSize/FontSizeBadge';
 import FontSizeSlider from '../FontSize/FontSizeSlider';
+import WeightSizeBadge from '../FontWeight/WeightSizeBadge';
 
 //Todo: Conditional rending for colorTheme
 //Todo: Add black to picker.
@@ -212,27 +213,12 @@ export function Welcome() {
             />
 
             {/* weight */}
-            <Badge
-              variant="outline"
-              size="lg"
-              mt={10}
-              mx={10}
-              onClick={() => {
-                setShowColors(false);
-                setShowCharacterInput(false);
-                setShowFontSize(false);
-                setShowDownloadOptions(false);
-                selectedFontWeight === 'normal'
-                  ? setSelectedFontWeight('bold')
-                  : setSelectedFontWeight('normal');
-              }}
-              style={{
-                cursor: 'pointer',
-                fontWeight: selectedFontWeight === 'normal' ? 'normal' : 'bold',
-              }}
-            >
-              weight
-            </Badge>
+            <WeightSizeBadge
+              resetBadges={resetBadges}
+              setSelectedFontWeight={setSelectedFontWeight}
+              selectedFontWeight={selectedFontWeight}
+            />
+
             {/* download */}
             <DownloadBadge
               setShowColors={setShowColors}
