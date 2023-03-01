@@ -6,19 +6,18 @@ import {
   Badge,
   Flex,
   Slider,
-  Button,
   Switch,
   useMantineColorScheme,
 } from '@mantine/core';
-import { IconPhoto, Icon123 } from '@tabler/icons';
-import { showNotification } from '@mantine/notifications';
-import html2canvas from 'html2canvas';
 import { Fade } from 'react-awesome-reveal';
 import { ImageDropzone } from '../ImageDropzone';
 import useStyles from './Welcome.styles';
 import AsciiImage from '../Ascii-Image/AsciiImage';
 import { Swatch } from '../ColorSwatch/Swatch';
 import { Characters } from '../Inputs/Characters';
+import DownloadBadge from '../Download/DownloadBadge';
+import DownloadButtons from '../Download/DownloadOptions';
+import { downloadContentToImage, downloadContentAsText } from '../Download/downloadLogic';
 
 //Todo: Conditional rending for colorTheme
 //Todo: Add black to picker.
@@ -69,54 +68,6 @@ export function Welcome() {
     reader.readAsDataURL(file);
   };
 
-  const downloadContentAsText = () => {
-    const asciiContent = asciiRef && asciiRef?.current?.innerText;
-
-    const fileName = 'ascii.txt';
-    const blob = new Blob([asciiContent!], { type: 'text/plain' });
-
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    link.click();
-    URL.revokeObjectURL(url);
-
-    showNotification({
-      title: 'Make it ASCII 😎',
-      message: 'Downloaded as text',
-    });
-  };
-
-  const downloadContentToImage = () => {
-    // Capture the content to be downloaded
-    const asciiContent = asciiRef && asciiRef?.current;
-
-    // Determine the height of the content
-    const height = asciiContent?.offsetHeight;
-
-    // Use html2canvas to render the content as an image
-    html2canvas(asciiContent!, { height }).then((canvas) => {
-      // Convert the final canvas to a data URL
-      const dataURL = canvas.toDataURL();
-
-      // Create a download link for the image
-      const link = document.createElement('a');
-      link.download = 'download.png';
-      link.href = dataURL;
-
-      // Click the download link to initiate the download
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
-
-    showNotification({
-      title: 'Make it ASCII 😎',
-      message: 'Downloaded as an image',
-    });
-  };
-
   return (
     <>
       {imageUrl && (
@@ -142,11 +93,9 @@ export function Welcome() {
               }}
             />
           )}
-
           {showColors && (
             <Swatch setSelectedColor={setSelectedColor} setShowColors={setShowColors} />
           )}
-
           {showCharacterInput && (
             <Flex justify="center" align="center">
               <Characters setSelectedChars={setSelectedChars} selectedChars={selectedChars} />
@@ -168,38 +117,12 @@ export function Welcome() {
               />
             </Flex>
           )}
-
           {showDownloadOptions && (
-            <>
-              <Button
-                variant="light"
-                rightIcon={<IconPhoto size={20} stroke={1.5} />}
-                radius="xl"
-                size="md"
-                mx={20}
-                styles={{
-                  root: { paddingRight: 14, height: 48 },
-                  rightIcon: { marginLeft: 22 },
-                }}
-                onClick={downloadContentToImage}
-              >
-                Save as image
-              </Button>
-
-              <Button
-                variant="light"
-                rightIcon={<Icon123 size={20} stroke={1.5} />}
-                radius="xl"
-                size="md"
-                styles={{
-                  root: { paddingRight: 14, height: 48 },
-                  rightIcon: { marginLeft: 22 },
-                }}
-                onClick={downloadContentAsText}
-              >
-                Save as text
-              </Button>
-            </>
+            <DownloadButtons
+              downloadContentToImage={downloadContentToImage}
+              downloadContentAsText={downloadContentAsText}
+              asciiRef={asciiRef}
+            />
           )}
         </Flex>
       )}
@@ -267,7 +190,6 @@ export function Welcome() {
             >
               Color
             </Badge>
-
             {/* Characters */}
             <Badge
               variant="outline"
@@ -286,7 +208,6 @@ export function Welcome() {
             >
               {selectedChars || 'Characters'}
             </Badge>
-
             {/* Font Size */}
             <Badge
               variant="outline"
@@ -305,7 +226,6 @@ export function Welcome() {
             >
               {`${selectedFontSize}px` || 'Size'}
             </Badge>
-
             {/* weight */}
             <Badge
               variant="outline"
@@ -328,28 +248,13 @@ export function Welcome() {
             >
               weight
             </Badge>
-
             {/* download */}
-            <Badge
-              variant="outline"
-              size="lg"
-              mt={10}
-              mx={10}
-              // onClick={downloadContent}
-              // onClick={downloadContentToImage}
-              onClick={() => {
-                setShowColors(false);
-                setShowFontSize(false);
-                setShowDownloadOptions(false);
-                setShowCharacterInput(false);
-                setShowDownloadOptions(true);
-              }}
-              style={{
-                cursor: 'pointer',
-              }}
-            >
-              download
-            </Badge>
+            <DownloadBadge
+              setShowColors={setShowColors}
+              setShowFontSize={setShowFontSize}
+              setShowCharacterInput={setShowCharacterInput}
+              setShowDownloadOptions={setShowDownloadOptions}
+            />
 
             {/* reset */}
             {imageUrl && (
