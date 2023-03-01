@@ -1,4 +1,4 @@
-import { Flex } from '@mantine/core';
+import { Flex, useMantineColorScheme } from '@mantine/core';
 
 export const Swatch = ({
   setSelectedColor,
@@ -7,6 +7,10 @@ export const Swatch = ({
   setSelectedColor: (color: string) => void;
   setShowColors: (show: boolean) => void;
 }) => {
+  const { colorScheme } = useMantineColorScheme();
+
+  const isDark = colorScheme === 'dark';
+
   const colors = [
     { name: 'red', hex: '#ff0000' },
     { name: 'green', hex: '#00ff00' },
@@ -14,8 +18,7 @@ export const Swatch = ({
     { name: 'yellow', hex: '#ffff00' },
     { name: 'cyan', hex: '#00ffff' },
     { name: 'magenta', hex: '#ff00ff' },
-    // { name: 'none', hex: '#329AEF' },
-    { name: 'white', hex: '#ffffff' },
+    { name: 'default', hex: isDark ? '#FFFFFF' : '#000000' },
   ];
 
   const selectedColor = (color: string) => {

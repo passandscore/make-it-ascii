@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useEffect, useState } from 'react';
+import { useMantineColorScheme } from '@mantine/core';
 
 const AsciiImage = (props: {
   src: string;
@@ -11,6 +12,8 @@ const AsciiImage = (props: {
   asciiRef?: any;
 }) => {
   const [asciiChars, setAsciiChars] = useState([] as string[]);
+
+  const { colorScheme } = useMantineColorScheme();
 
   const map = props.selectedChars || ' .:-=+*#%@|';
   const resolutionY = 0.6;
@@ -66,8 +69,9 @@ const AsciiImage = (props: {
           border: 1px solid transparent;
           font-weight: ${props.selectedFontWeight};
           line-height: 0.95em;
-          color: ${props.selectedColor || 'white'};
+          color: ${props.selectedColor || (colorScheme === 'dark' ? '#FFFFFF' : '#000000')};
           font-size: ${props.selectedFontSize}px;
+          background-color: ${colorScheme === 'dark' ? '#000000' : '#FFFFFF'};
         }
         `}
       </style>

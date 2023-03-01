@@ -1,5 +1,15 @@
-import React, { useState, useRef } from 'react';
-import { Title, Text, Container, Badge, Flex, Slider, Button, Switch } from '@mantine/core';
+import React, { useState, useRef, useEffect } from 'react';
+import {
+  Title,
+  Text,
+  Container,
+  Badge,
+  Flex,
+  Slider,
+  Button,
+  Switch,
+  useMantineColorScheme,
+} from '@mantine/core';
 import { IconPhoto, Icon123 } from '@tabler/icons';
 import { showNotification } from '@mantine/notifications';
 import html2canvas from 'html2canvas';
@@ -10,13 +20,18 @@ import AsciiImage from '../Ascii-Image/AsciiImage';
 import { Swatch } from '../ColorSwatch/Swatch';
 import { Characters } from '../Inputs/Characters';
 
+//Todo: Conditional rending for colorTheme
+//Todo: Add black to picker.
 export function Welcome() {
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === 'dark';
+
   const [imageUrl, setImageUrl] = useState('');
   const [showColors, setShowColors] = useState(false);
   const [showCharacterInput, setShowCharacterInput] = useState(false);
   const [showFontSize, setShowFontSize] = useState(false);
   const [showDownloadOptions, setShowDownloadOptions] = useState(false);
-  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedColor, setSelectedColor] = useState(isDark ? '#fff' : '#000');
   const [selectedChars, setSelectedChars] = useState(' .:-= +*#%@|');
   const [selectedFontSize, setSelectedFontSize] = useState(14);
   const [selectedFontWeight, setSelectedFontWeight] = useState('bold');
@@ -27,6 +42,10 @@ export function Welcome() {
 
   const { classes } = useStyles();
   const asciiRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    isDark ? setSelectedColor('#fff') : setSelectedColor('#000');
+  }, [isDark]);
 
   const handleReset = () => {
     setImageUrl('');
@@ -78,21 +97,8 @@ export function Welcome() {
 
     // Use html2canvas to render the content as an image
     html2canvas(asciiContent!, { height }).then((canvas) => {
-      // Create a new canvas with the same dimensions as the content canvas
-      const finalCanvas = document.createElement('canvas');
-      finalCanvas.width = canvas.width;
-      finalCanvas.height = canvas.height;
-
-      // Draw the image on the final canvas at the center
-      const ctx = finalCanvas.getContext('2d');
-      ctx?.drawImage(
-        canvas,
-        (finalCanvas.width - canvas.width) / 2,
-        (finalCanvas.height - canvas.height) / 2
-      );
-
       // Convert the final canvas to a data URL
-      const dataURL = finalCanvas.toDataURL();
+      const dataURL = canvas.toDataURL();
 
       // Create a download link for the image
       const link = document.createElement('a');
@@ -199,29 +205,46 @@ export function Welcome() {
       )}
 
       {!imageUrl && (
-        <Title className={classes.title} align="center" mt={100}>
-          Make it{' '}
-          <Text inherit variant="gradient" component="span">
-            ASCII
-          </Text>
-        </Title>
+        <>
+          <Title className={classes.title} align="center" mt={100}>
+            Make it{' '}
+            <Text inherit variant="gradient" component="span">
+              ASCII
+            </Text>
+          </Title>
+        </>
       )}
 
       <Flex justify="center">
         {/* reveal */}
         {!imageUrl ? (
-          <Badge
-            variant="outline"
-            size="lg"
-            mt={10}
-            mx={10}
-            onClick={() => setShowColors(!showColors)}
-            style={{
-              cursor: 'pointer',
-            }}
-          >
-            reveal
-          </Badge>
+          <Flex>
+            <Badge
+              variant="outline"
+              size="lg"
+              mt={10}
+              mx={10}
+              onClick={() => setShowColors(!showColors)}
+              style={{
+                cursor: 'pointer',
+              }}
+            >
+              reveal
+            </Badge>
+
+            <Badge
+              variant="outline"
+              size="lg"
+              mt={10}
+              mx={10}
+              onClick={() => toggleColorScheme()}
+              style={{
+                cursor: 'pointer',
+              }}
+            >
+              {colorScheme === 'light' ? 'dark' : 'light'}
+            </Badge>
+          </Flex>
         ) : (
           <>
             {/* color */}
@@ -234,11 +257,11 @@ export function Welcome() {
                 setShowCharacterInput(false);
                 setShowFontSize(false);
                 setShowDownloadOptions(false);
-                setShowColors(!showColors);
+                setShowColors(true);
               }}
               style={{
-                color: selectedColor || '#329AEF',
-                borderColor: selectedColor || '#329AEF',
+                color: selectedColor,
+                borderColor: selectedColor,
                 cursor: 'pointer',
               }}
             >
@@ -255,7 +278,7 @@ export function Welcome() {
                 setShowColors(false);
                 setShowFontSize(false);
                 setShowDownloadOptions(false);
-                setShowCharacterInput(!showCharacterInput);
+                setShowCharacterInput(true);
               }}
               style={{
                 cursor: 'pointer',
@@ -319,7 +342,7 @@ export function Welcome() {
                 setShowFontSize(false);
                 setShowDownloadOptions(false);
                 setShowCharacterInput(false);
-                setShowDownloadOptions(!showDownloadOptions);
+                setShowDownloadOptions(true);
               }}
               style={{
                 cursor: 'pointer',
