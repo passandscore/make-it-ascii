@@ -1,37 +1,17 @@
 import { useRef } from 'react';
-import { Button, Group, Text, useMantineTheme, MantineSize } from '@mantine/core';
+import { Group, Text, useMantineTheme } from '@mantine/core';
 import { IconUpload, IconPhoto, IconX } from '@tabler/icons';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 
 export function ImageDropzone({
   handleDrop,
   imageUrl,
-  width,
-  handleReset,
 }: {
   handleDrop: (files: File[]) => void;
   imageUrl: string;
-  width: number;
-  handleReset: () => void;
 }) {
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);
-
-  const handleButtonSize = (): MantineSize => {
-    if (width < 600) {
-      return 'xs';
-    }
-    if (width < 900) {
-      return 'sm';
-    }
-    if (width < 1200) {
-      return 'md';
-    }
-    if (width < 1500) {
-      return 'lg';
-    }
-    return 'xl';
-  };
 
   return (
     <>
@@ -68,22 +48,6 @@ export function ImageDropzone({
             </div>
           </Group>
         </Dropzone>
-      )}
-
-      {imageUrl && (
-        <Group position="center" mt="md">
-          <Button
-            onClick={handleReset}
-            variant="outline"
-            color="teal"
-            size={handleButtonSize()}
-            mt="xl"
-            mx="auto"
-            display="block"
-          >
-            Reset
-          </Button>
-        </Group>
       )}
     </>
   );

@@ -14,7 +14,7 @@ export const Swatch = ({
     { name: 'yellow', hex: '#ffff00' },
     { name: 'cyan', hex: '#00ffff' },
     { name: 'magenta', hex: '#ff00ff' },
-    { name: 'none', hex: '#329AEF' },
+    // { name: 'none', hex: '#329AEF' },
     { name: 'white', hex: '#ffffff' },
   ];
 

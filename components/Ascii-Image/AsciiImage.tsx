@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
-const AsciiImage = (props: { columns?: number; src: string; selectedColor?: string }) => {
+const AsciiImage = (props: {
+  src: string;
+  selectedColor?: string;
+  selectedChars?: string;
+  selectedFontSize?: string;
+}) => {
   const [asciiChars, setAsciiChars] = useState([] as string[]);
-  // const map = '@#%*+=-:. ';
-  const map = ' .:-=+*#%@|';
+  const map = props.selectedChars || ' .:-=+*#%@|';
 
   const resolutionY = 0.6;
-  const columns = props.columns || 80;
+  const columns = 70;
 
   const convertToAscii = (url: string) => {
     const image = new Image();
@@ -38,7 +42,7 @@ const AsciiImage = (props: { columns?: number; src: string; selectedColor?: stri
     if (props.src) {
       convertToAscii(props.src);
     }
-  }, [props.columns, props.selectedColor]);
+  }, [props.selectedColor, props.selectedChars, props.selectedFontSize]);
 
   const ascii = () => asciiChars.join('');
 
@@ -48,6 +52,7 @@ const AsciiImage = (props: { columns?: number; src: string; selectedColor?: stri
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        padding: '1rem',
       }}
     >
       <style>
@@ -56,6 +61,7 @@ const AsciiImage = (props: { columns?: number; src: string; selectedColor?: stri
           font-weight: bold;
           line-height: 0.95em;
           color: ${props.selectedColor || 'white'};
+          font-size: ${props.selectedFontSize}px;
         }
         `}
       </style>

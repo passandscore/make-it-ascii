@@ -1,23 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { Title, Text, Container, Badge, Flex } from '@mantine/core';
-import { useViewportSize } from '@mantine/hooks';
+import React, { useState } from 'react';
+import { Title, Text, Container, Badge, Flex, Slider } from '@mantine/core';
+import { Fade } from 'react-awesome-reveal';
 import { ImageDropzone } from '../ImageDropzone';
 import useStyles from './Welcome.styles';
 import AsciiImage from '../Ascii-Image/AsciiImage';
 import { Swatch } from '../ColorSwatch/Swatch';
+import { Characters } from '../Inputs/Characters';
 
 export function Welcome() {
   const [imageUrl, setImageUrl] = useState('');
-  const [columns, setColumns] = useState(72);
   const [showColors, setShowColors] = useState(false);
+  const [showCharacterInput, setShowCharacterInput] = useState(false);
+  const [showFontSize, setShowFontSize] = useState(false);
   const [selectedColor, setSelectedColor] = useState('');
+  const [selectedChars, setSelectedChars] = useState('');
+  const [selectedFontSize, setSelectedFontSize] = useState(14);
+
+  const selectedFontDefaultValue =
+    Number(((Number(selectedFontSize - 8) * 100) / 8).toFixed(2)) || 14;
 
   const { classes } = useStyles();
-  const { width } = useViewportSize();
 
   const handleReset = () => {
     setImageUrl('');
     setSelectedColor('');
+    setSelectedChars('');
+    setShowCharacterInput(false);
+    setShowColors(false);
+    setShowFontSize(false);
   };
 
   const handleDrop = (files: File[]) => {
@@ -31,73 +41,66 @@ export function Welcome() {
     reader.readAsDataURL(file);
   };
 
-  useEffect(() => {
-    if (width < 600) {
-      setColumns(36);
-      return;
-    }
-    if (width < 900) {
-      setColumns(48);
-      return;
-    }
-    if (width < 1200) {
-      setColumns(60);
-      return;
-    }
-    if (width < 1500) {
-      setColumns(72);
-    }
-  }, [width]);
-
   return (
     <>
-      {showColors && (
-        <Flex
-          justify="center"
-          mt={2}
-          style={{
-            position: 'absolute',
-            top: '25px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            cursor: 'pointer',
-            zIndex: 100,
-          }}
-        >
-          <Swatch setSelectedColor={setSelectedColor} setShowColors={setShowColors} />
+      {imageUrl && (
+        <Flex justify="center" align="center" my={20} h={100}>
+          {showFontSize && (
+            <Slider
+              size="lg"
+              radius="lg"
+              defaultValue={selectedFontDefaultValue}
+              marks={[
+                { value: 0, label: '8px' },
+                { value: 25, label: '10px' },
+                { value: 50, label: '12px' },
+                { value: 75, label: '14px' },
+                { value: 100, label: '16px' },
+              ]}
+              style={{
+                width: '50%',
+              }}
+              onChange={(value) => {
+                const fontSize = ((value / 100) * 8 + 8).toFixed(2);
+                setSelectedFontSize(Number(fontSize));
+              }}
+            />
+          )}
+
+          {showColors && (
+            <Swatch setSelectedColor={setSelectedColor} setShowColors={setShowColors} />
+          )}
+
+          {showCharacterInput && (
+            <Characters setSelectedChars={setSelectedChars} selectedChars={selectedChars} />
+          )}
         </Flex>
       )}
 
-      <Title className={classes.title} align="center" mt={100}>
-        Make it{' '}
-        <Text inherit variant="gradient" component="span">
-          ASCII
-        </Text>
-      </Title>
+      {!imageUrl && (
+        <Title className={classes.title} align="center" mt={100}>
+          Make it{' '}
+          <Text inherit variant="gradient" component="span">
+            ASCII
+          </Text>
+        </Title>
+      )}
 
       <Flex justify="center">
+        {/* color */}
         <Badge
           variant="outline"
           size="lg"
           mt={10}
-          onClick={() => setShowColors(!showColors)}
-          style={{
-            cursor: 'pointer',
+          mx={10}
+          onClick={() => {
+            setShowCharacterInput(false);
+            setShowFontSize(false);
+            setShowColors(!showColors);
           }}
-        >
-          {' '}
-          Characters
-        </Badge>
-
-        <Badge
-          variant="outline"
-          size="lg"
-          mt={10}
-          mx={20}
-          onClick={() => setShowColors(!showColors)}
           style={{
-            color: selectedColor || 'white',
-            borderColor: selectedColor || 'white',
+            color: selectedColor || '#329AEF',
+            borderColor: selectedColor || '#329AEF',
             cursor: 'pointer',
           }}
         >
@@ -105,33 +108,127 @@ export function Welcome() {
           Color
         </Badge>
 
+        {/* Characters */}
         <Badge
           variant="outline"
           size="lg"
           mt={10}
+          mx={10}
+          onClick={() => {
+            setShowColors(false);
+            setShowFontSize(false);
+            setShowCharacterInput(!showCharacterInput);
+          }}
+          style={{
+            cursor: 'pointer',
+          }}
+        >
+          {' '}
+          {selectedChars || 'Characters'}
+        </Badge>
+
+        {/* Font Size */}
+        <Badge
+          variant="outline"
+          size="lg"
+          mt={10}
+          mx={10}
+          onClick={() => {
+            setShowColors(false);
+            setShowCharacterInput(false);
+            setShowFontSize(true);
+          }}
+          style={{
+            cursor: 'pointer',
+          }}
+        >
+          {`${selectedFontSize}px` || 'Size'}
+        </Badge>
+
+        {/* reveal */}
+        <Badge
+          variant="outline"
+          size="lg"
+          mt={10}
+          mx={10}
           onClick={() => setShowColors(!showColors)}
           style={{
             cursor: 'pointer',
           }}
         >
           {' '}
-          Dimensions
+          reveal
         </Badge>
+
+        {/* weight */}
+        <Badge
+          variant="outline"
+          size="lg"
+          mt={10}
+          mx={10}
+          onClick={() => setShowColors(!showColors)}
+          style={{
+            cursor: 'pointer',
+          }}
+        >
+          {' '}
+          weight
+        </Badge>
+
+        {/* copy */}
+        <Badge
+          variant="outline"
+          size="lg"
+          mt={10}
+          mx={10}
+          onClick={() => {
+            setShowColors(false);
+            setShowCharacterInput(!showCharacterInput);
+          }}
+          style={{
+            cursor: 'pointer',
+          }}
+        >
+          copy
+        </Badge>
+
+        {/* reset */}
+        {imageUrl && (
+          <Badge
+            variant="outline"
+            size="lg"
+            mt={10}
+            mx={10}
+            onClick={() => {
+              handleReset();
+            }}
+            style={{
+              color: 'red',
+              borderColor: 'red',
+              cursor: 'pointer',
+            }}
+          >
+            {' '}
+            Reset
+          </Badge>
+        )}
       </Flex>
 
       <Container size="xs" mt="xl">
-        <ImageDropzone
-          handleDrop={handleDrop}
-          imageUrl={imageUrl}
-          width={width}
-          handleReset={handleReset}
-        />
+        <ImageDropzone handleDrop={handleDrop} imageUrl={imageUrl} />
       </Container>
 
       {imageUrl && (
-        <Container>
-          <AsciiImage src={imageUrl} columns={columns} selectedColor={selectedColor} />
-        </Container>
+        <Fade triggerOnce duration={800} delay={800} damping={0.2}>
+          <Container>
+            <AsciiImage
+              src={imageUrl}
+              selectedColor={selectedColor}
+              selectedChars={selectedChars}
+              selectedFontSize={String(selectedFontSize)}
+            />
+          </Container>
+        </Fade>
       )}
     </>
   );
