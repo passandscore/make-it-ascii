@@ -13,17 +13,17 @@ import { Fade } from 'react-awesome-reveal';
 import { ImageDropzone } from '../ImageDropzone';
 import useStyles from './Welcome.styles';
 import AsciiImage from '../Ascii-Image/AsciiImage';
-import { Swatch } from '../ColorSwatch/Swatch';
-import { Characters } from '../Inputs/Characters';
+import FontColorSwatch from '../FontColor/FontColorSwatch';
 import DownloadBadge from '../Download/DownloadBadge';
 import DownloadButtons from '../Download/DownloadOptions';
 import { downloadContentToImage, downloadContentAsText } from '../Download/downloadLogic';
 import FontSizeBadge from '../FontSize/FontSizeBadge';
 import FontSizeSlider from '../FontSize/FontSizeSlider';
 import WeightSizeBadge from '../FontWeight/WeightSizeBadge';
+import CharacterInputs from '../FontCharacters/CharacterInputs';
+import BackgroundToggleSwitch from '../FontCharacters/BackgroundToggleSwitch';
+import { fontCharacterInputsDefaultValue } from '../../constants';
 
-//Todo: Conditional rending for colorTheme
-//Todo: Add black to picker.
 export function Welcome() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const isDark = colorScheme === 'dark';
@@ -34,7 +34,7 @@ export function Welcome() {
   const [showFontSize, setShowFontSize] = useState(false);
   const [showDownloadOptions, setShowDownloadOptions] = useState(false);
   const [selectedColor, setSelectedColor] = useState(isDark ? '#fff' : '#000');
-  const [selectedChars, setSelectedChars] = useState(' .:-= +*#%@|');
+  const [selectedChars, setSelectedChars] = useState(fontCharacterInputsDefaultValue);
   const [selectedFontSize, setSelectedFontSize] = useState(14);
   const [selectedFontWeight, setSelectedFontWeight] = useState('bold');
   const [backgroundState, setBackgroundState] = useState('transparent');
@@ -89,27 +89,20 @@ export function Welcome() {
               setSelectedFontSize={setSelectedFontSize}
             />
           )}
+
           {showColors && (
-            <Swatch setSelectedColor={setSelectedColor} setShowColors={setShowColors} />
+            <FontColorSwatch setSelectedColor={setSelectedColor} setShowColors={setShowColors} />
           )}
+
           {showCharacterInput && (
             <Flex justify="center" align="center">
-              <Characters setSelectedChars={setSelectedChars} selectedChars={selectedChars} />
-              <Switch
-                ml={20}
-                label="Add Background"
-                onChange={() => {
-                  const currentChars = selectedChars.split('');
-                  if (backgroundState === 'transparent') {
-                    setBackgroundState('visible');
-                    currentChars.shift();
-                  } else {
-                    setBackgroundState('transparent');
-                    currentChars.unshift(' ');
-                  }
-                  const newChars = currentChars.join('');
-                  setSelectedChars(newChars);
-                }}
+              {/* font characters */}
+              <CharacterInputs setSelectedChars={setSelectedChars} selectedChars={selectedChars} />
+              <BackgroundToggleSwitch
+                selectedChars={selectedChars}
+                backgroundState={backgroundState}
+                setBackgroundState={setBackgroundState}
+                setSelectedChars={setSelectedChars}
               />
             </Flex>
           )}

@@ -1,6 +1,6 @@
 import { Flex, useMantineColorScheme } from '@mantine/core';
 
-export const Swatch = ({
+const FontColorSwatch = ({
   setSelectedColor,
   setShowColors,
 }: {
@@ -51,3 +51,5 @@ export const Swatch = ({
     </Flex>
   );
 };
+
+export default FontColorSwatch;

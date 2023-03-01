@@ -71,7 +71,6 @@ const AsciiImage = (props: {
           line-height: 0.95em;
           color: ${props.selectedColor || (colorScheme === 'dark' ? '#FFFFFF' : '#000000')};
           font-size: ${props.selectedFontSize}px;
-          background-color: ${colorScheme === 'dark' ? '#000000' : '#FFFFFF'};
         }
         `}
       </style>
@@ -81,3 +80,5 @@ const AsciiImage = (props: {
 };
 
 export default AsciiImage;
+
+// background-color: ${colorScheme === 'dark' ? '#000000' : '#FFFFFF'};
