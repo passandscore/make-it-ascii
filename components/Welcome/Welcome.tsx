@@ -18,6 +18,8 @@ import { Characters } from '../Inputs/Characters';
 import DownloadBadge from '../Download/DownloadBadge';
 import DownloadButtons from '../Download/DownloadOptions';
 import { downloadContentToImage, downloadContentAsText } from '../Download/downloadLogic';
+import FontSizeBadge from '../FontSize/FontSizeBadge';
+import FontSizeSlider from '../FontSize/FontSizeSlider';
 
 //Todo: Conditional rending for colorTheme
 //Todo: Add black to picker.
@@ -68,29 +70,22 @@ export function Welcome() {
     reader.readAsDataURL(file);
   };
 
+  const resetBadges = () => {
+    setShowCharacterInput(false);
+    setShowColors(false);
+    setShowFontSize(false);
+    setShowDownloadOptions(false);
+  };
+
   return (
     <>
       {imageUrl && (
         <Flex justify="center" align="center" my={20} h={100}>
+          {/* font size */}
           {showFontSize && (
-            <Slider
-              size="lg"
-              radius="lg"
-              defaultValue={selectedFontDefaultValue}
-              marks={[
-                { value: 0, label: '8px' },
-                { value: 25, label: '10px' },
-                { value: 50, label: '12px' },
-                { value: 75, label: '14px' },
-                { value: 100, label: '16px' },
-              ]}
-              style={{
-                width: '50%',
-              }}
-              onChange={(value) => {
-                const fontSize = ((value / 100) * 8 + 8).toFixed(2);
-                setSelectedFontSize(Number(fontSize));
-              }}
+            <FontSizeSlider
+              selectedFontDefaultValue={selectedFontDefaultValue}
+              setSelectedFontSize={setSelectedFontSize}
             />
           )}
           {showColors && (
@@ -208,24 +203,14 @@ export function Welcome() {
             >
               {selectedChars || 'Characters'}
             </Badge>
+
             {/* Font Size */}
-            <Badge
-              variant="outline"
-              size="lg"
-              mt={10}
-              mx={10}
-              onClick={() => {
-                setShowColors(false);
-                setShowCharacterInput(false);
-                setShowDownloadOptions(false);
-                setShowFontSize(true);
-              }}
-              style={{
-                cursor: 'pointer',
-              }}
-            >
-              {`${selectedFontSize}px` || 'Size'}
-            </Badge>
+            <FontSizeBadge
+              resetBadges={resetBadges}
+              setShowFontSize={setShowFontSize}
+              selectedFontSize={selectedFontSize}
+            />
+
             {/* weight */}
             <Badge
               variant="outline"
@@ -255,7 +240,6 @@ export function Welcome() {
               setShowCharacterInput={setShowCharacterInput}
               setShowDownloadOptions={setShowDownloadOptions}
             />
-
             {/* reset */}
             {imageUrl && (
               <Badge
