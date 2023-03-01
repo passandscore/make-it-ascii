@@ -5,6 +5,7 @@ const AsciiImage = (props: {
   selectedColor?: string;
   selectedChars?: string;
   selectedFontSize?: string;
+  selectedFontWeight?: string;
 }) => {
   const [asciiChars, setAsciiChars] = useState([] as string[]);
   const map = props.selectedChars || ' .:-=+*#%@|';
@@ -42,7 +43,7 @@ const AsciiImage = (props: {
     if (props.src) {
       convertToAscii(props.src);
     }
-  }, [props.selectedColor, props.selectedChars, props.selectedFontSize]);
+  }, [props.selectedColor, props.selectedChars, props.selectedFontSize, props.selectedFontWeight]);
 
   const ascii = () => asciiChars.join('');
 
@@ -58,7 +59,7 @@ const AsciiImage = (props: {
       <style>
         {`
         pre {
-          font-weight: bold;
+          font-weight: ${props.selectedFontWeight};
           line-height: 0.95em;
           color: ${props.selectedColor || 'white'};
           font-size: ${props.selectedFontSize}px;

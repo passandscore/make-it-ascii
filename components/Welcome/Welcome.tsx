@@ -15,6 +15,7 @@ export function Welcome() {
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedChars, setSelectedChars] = useState('');
   const [selectedFontSize, setSelectedFontSize] = useState(14);
+  const [selectedFontWeight, setSelectedFontWeight] = useState('bold');
 
   const selectedFontDefaultValue =
     Number(((Number(selectedFontSize - 8) * 100) / 8).toFixed(2)) || 14;
@@ -25,6 +26,7 @@ export function Welcome() {
     setImageUrl('');
     setSelectedColor('');
     setSelectedChars('');
+    setSelectedFontSize(14);
     setShowCharacterInput(false);
     setShowColors(false);
     setShowFontSize(false);
@@ -87,130 +89,139 @@ export function Welcome() {
       )}
 
       <Flex justify="center">
-        {/* color */}
-        <Badge
-          variant="outline"
-          size="lg"
-          mt={10}
-          mx={10}
-          onClick={() => {
-            setShowCharacterInput(false);
-            setShowFontSize(false);
-            setShowColors(!showColors);
-          }}
-          style={{
-            color: selectedColor || '#329AEF',
-            borderColor: selectedColor || '#329AEF',
-            cursor: 'pointer',
-          }}
-        >
-          {' '}
-          Color
-        </Badge>
-
-        {/* Characters */}
-        <Badge
-          variant="outline"
-          size="lg"
-          mt={10}
-          mx={10}
-          onClick={() => {
-            setShowColors(false);
-            setShowFontSize(false);
-            setShowCharacterInput(!showCharacterInput);
-          }}
-          style={{
-            cursor: 'pointer',
-          }}
-        >
-          {' '}
-          {selectedChars || 'Characters'}
-        </Badge>
-
-        {/* Font Size */}
-        <Badge
-          variant="outline"
-          size="lg"
-          mt={10}
-          mx={10}
-          onClick={() => {
-            setShowColors(false);
-            setShowCharacterInput(false);
-            setShowFontSize(true);
-          }}
-          style={{
-            cursor: 'pointer',
-          }}
-        >
-          {`${selectedFontSize}px` || 'Size'}
-        </Badge>
-
         {/* reveal */}
-        <Badge
-          variant="outline"
-          size="lg"
-          mt={10}
-          mx={10}
-          onClick={() => setShowColors(!showColors)}
-          style={{
-            cursor: 'pointer',
-          }}
-        >
-          {' '}
-          reveal
-        </Badge>
-
-        {/* weight */}
-        <Badge
-          variant="outline"
-          size="lg"
-          mt={10}
-          mx={10}
-          onClick={() => setShowColors(!showColors)}
-          style={{
-            cursor: 'pointer',
-          }}
-        >
-          {' '}
-          weight
-        </Badge>
-
-        {/* copy */}
-        <Badge
-          variant="outline"
-          size="lg"
-          mt={10}
-          mx={10}
-          onClick={() => {
-            setShowColors(false);
-            setShowCharacterInput(!showCharacterInput);
-          }}
-          style={{
-            cursor: 'pointer',
-          }}
-        >
-          copy
-        </Badge>
-
-        {/* reset */}
-        {imageUrl && (
+        {!imageUrl ? (
           <Badge
             variant="outline"
             size="lg"
             mt={10}
             mx={10}
-            onClick={() => {
-              handleReset();
-            }}
+            onClick={() => setShowColors(!showColors)}
             style={{
-              color: 'red',
-              borderColor: 'red',
               cursor: 'pointer',
             }}
           >
-            {' '}
-            Reset
+            reveal
           </Badge>
+        ) : (
+          <>
+            {/* color */}
+            <Badge
+              variant="outline"
+              size="lg"
+              mt={10}
+              mx={10}
+              onClick={() => {
+                setShowCharacterInput(false);
+                setShowFontSize(false);
+                setShowColors(!showColors);
+              }}
+              style={{
+                color: selectedColor || '#329AEF',
+                borderColor: selectedColor || '#329AEF',
+                cursor: 'pointer',
+              }}
+            >
+              Color
+            </Badge>
+
+            {/* Characters */}
+            <Badge
+              variant="outline"
+              size="lg"
+              mt={10}
+              mx={10}
+              onClick={() => {
+                setShowColors(false);
+                setShowFontSize(false);
+                setShowCharacterInput(!showCharacterInput);
+              }}
+              style={{
+                cursor: 'pointer',
+              }}
+            >
+              {selectedChars || 'Characters'}
+            </Badge>
+
+            {/* Font Size */}
+            <Badge
+              variant="outline"
+              size="lg"
+              mt={10}
+              mx={10}
+              onClick={() => {
+                setShowColors(false);
+                setShowCharacterInput(false);
+                setShowFontSize(true);
+              }}
+              style={{
+                cursor: 'pointer',
+              }}
+            >
+              {`${selectedFontSize}px` || 'Size'}
+            </Badge>
+
+            {/* weight */}
+            <Badge
+              variant="outline"
+              size="lg"
+              mt={10}
+              mx={10}
+              onClick={() => {
+                setShowColors(false);
+                setShowCharacterInput(false);
+                setShowFontSize(false);
+                selectedFontWeight === 'normal'
+                  ? setSelectedFontWeight('bold')
+                  : setSelectedFontWeight('normal');
+              }}
+              style={{
+                cursor: 'pointer',
+                fontWeight: selectedFontWeight === 'normal' ? 'normal' : 'bold',
+              }}
+            >
+              {' '}
+              weight
+            </Badge>
+
+            {/* copy */}
+            <Badge
+              variant="outline"
+              size="lg"
+              mt={10}
+              mx={10}
+              onClick={() => {
+                setShowColors(false);
+                setShowCharacterInput(!showCharacterInput);
+              }}
+              style={{
+                cursor: 'pointer',
+              }}
+            >
+              copy
+            </Badge>
+
+            {/* reset */}
+            {imageUrl && (
+              <Badge
+                variant="outline"
+                size="lg"
+                mt={10}
+                mx={10}
+                onClick={() => {
+                  handleReset();
+                }}
+                style={{
+                  color: 'red',
+                  borderColor: 'red',
+                  cursor: 'pointer',
+                }}
+              >
+                {' '}
+                Reset
+              </Badge>
+            )}
+          </>
         )}
       </Flex>
 
@@ -226,6 +237,7 @@ export function Welcome() {
               selectedColor={selectedColor}
               selectedChars={selectedChars}
               selectedFontSize={String(selectedFontSize)}
+              selectedFontWeight={selectedFontWeight}
             />
           </Container>
         </Fade>
