@@ -9,7 +9,6 @@ import {
   FontSizeSlider,
   WeightSizeBadge,
   CharacterInputs,
-  BackgroundToggleSwitch,
   MakeItAsciiTitle,
   FontColorBadge,
   FontCharactersBadge,
@@ -41,7 +40,6 @@ function MakeItASCII() {
   const [selectedChars, setSelectedChars] = useState('');
   const [selectedFontSize, setSelectedFontSize] = useState(14);
   const [selectedFontWeight, setSelectedFontWeight] = useState('bold');
-  const [backgroundState, setBackgroundState] = useState('transparent');
   const [selectedFeature, setSelectedFeature] = useState('');
   const [openRevealModal, setOpenRevealModal] = useState<boolean>(false);
 
@@ -66,6 +64,7 @@ function MakeItASCII() {
     setSelectedColor('');
     setSelectedChars('');
     setSelectedBackgroundColor('');
+    setSelectedFeature('');
     setSelectedFontSize(14);
     setShowCharacterInput(false);
     setShowColors(false);
@@ -80,6 +79,7 @@ function MakeItASCII() {
     setShowFontSize(false);
     setShowDownloadOptions(false);
     setShowBackgroundColors(false);
+    setSelectedFeature('');
   };
 
   return (
@@ -105,13 +105,18 @@ function MakeItASCII() {
             )}
 
             {showColors && (
-              <FontColorSwatch setSelectedColor={setSelectedColor} setShowColors={setShowColors} />
+              <FontColorSwatch
+                setSelectedColor={setSelectedColor}
+                setShowColors={setShowColors}
+                setSelectedFeature={setSelectedFeature}
+              />
             )}
 
             {showBackgroundColors && (
               <BackgroundColorSwatch
                 setSelectedBackgroundColor={setSelectedBackgroundColor}
                 setShowBackgroundColors={setShowBackgroundColors}
+                setSelectedFeature={setSelectedFeature}
               />
             )}
 
@@ -121,12 +126,7 @@ function MakeItASCII() {
                   setSelectedChars={setSelectedChars}
                   selectedChars={selectedChars}
                 />
-                <BackgroundToggleSwitch
-                  selectedChars={selectedChars}
-                  backgroundState={backgroundState}
-                  setBackgroundState={setBackgroundState}
-                  setSelectedChars={setSelectedChars}
-                />
+
                 <QuestionMarkTooltip />
               </Flex>
             )}
@@ -178,6 +178,7 @@ function MakeItASCII() {
               resetBadges={resetBadges}
               setSelectedFontWeight={setSelectedFontWeight}
               selectedFontWeight={selectedFontWeight}
+              setSelectedFeature={setSelectedFeature}
             />
 
             <DownloadBadge

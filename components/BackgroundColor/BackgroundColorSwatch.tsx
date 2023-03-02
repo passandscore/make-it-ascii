@@ -4,9 +4,11 @@ import { defaultBadgeColor } from '../../constants';
 export const BackgroundColorSwatch = ({
   setSelectedBackgroundColor,
   setShowBackgroundColors,
+  setSelectedFeature,
 }: {
   setSelectedBackgroundColor: (color: string) => void;
   setShowBackgroundColors: (show: boolean) => void;
+  setSelectedFeature: (feature: string) => void;
 }) => {
   const colors = [
     { name: 'black', hex: '#000000', border: '1px solid #FFFFFF' },
@@ -23,6 +25,7 @@ export const BackgroundColorSwatch = ({
     const noColor = defaultBadgeColor;
     color === noColor ? setSelectedBackgroundColor('') : setSelectedBackgroundColor(color);
     setShowBackgroundColors(false);
+    setSelectedFeature('');
   };
   return (
     <Flex

@@ -4,9 +4,11 @@ import { defaultBadgeColor } from '../../constants';
 export const FontColorSwatch = ({
   setSelectedColor,
   setShowColors,
+  setSelectedFeature,
 }: {
   setSelectedColor: (color: string) => void;
   setShowColors: (show: boolean) => void;
+  setSelectedFeature: (feature: string) => void;
 }) => {
   const colors = [
     { name: 'black', hex: '#000000', border: '1px solid #FFFFFF' },
@@ -23,6 +25,7 @@ export const FontColorSwatch = ({
     const noColor = defaultBadgeColor;
     color === noColor ? setSelectedColor('') : setSelectedColor(color);
     setShowColors(false);
+    setSelectedFeature('');
   };
   return (
     <Flex

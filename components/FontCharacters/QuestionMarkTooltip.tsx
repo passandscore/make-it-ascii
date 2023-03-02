@@ -3,7 +3,7 @@ import { IconQuestionCircle } from '@tabler/icons-react';
 import { defaultBadgeColor } from '../../constants';
 
 export const QuestionMarkTooltip = () => {
-  const label = 'Add or removes the first character (space) from the selected characters.';
+  const label = 'Place a space as the first character to remove the background.';
 
   return (
     <Tooltip
@@ -11,11 +11,11 @@ export const QuestionMarkTooltip = () => {
       color="blue"
       position="bottom"
       arrowPosition="center"
-      style={{ cursor: 'pointer' }}
+      style={{ cursor: 'pointer', marginTop: '10px' }}
     >
       <IconQuestionCircle
-        size="1.3rem"
-        style={{ marginBottom: 10, color: defaultBadgeColor, strokeWidth: '1.8px' }}
+        size="1.7rem"
+        style={{ marginLeft: '10px', color: defaultBadgeColor, strokeWidth: '1.5px' }}
       />
     </Tooltip>
   );

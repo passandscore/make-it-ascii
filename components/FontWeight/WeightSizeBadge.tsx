@@ -4,10 +4,12 @@ export const WeightSizeBadge = ({
   resetBadges,
   setSelectedFontWeight,
   selectedFontWeight,
+  setSelectedFeature,
 }: {
   resetBadges: () => void;
   setSelectedFontWeight: (arg: string) => void;
   selectedFontWeight: string;
+  setSelectedFeature: (arg: string) => void;
 }) => (
   <Badge
     variant="outline"
@@ -16,6 +18,7 @@ export const WeightSizeBadge = ({
     mx={10}
     onClick={() => {
       resetBadges();
+      setSelectedFeature('');
       selectedFontWeight === 'normal'
         ? setSelectedFontWeight('bold')
         : setSelectedFontWeight('normal');
