@@ -4,10 +4,16 @@ export const FontCharactersBadge = ({
   resetBadges,
   setShowCharacterInput,
   selectedChars,
+  showCharacterInput,
+  setSelectedFeature,
+  selectedFeature,
 }: {
   resetBadges: () => void;
   setShowCharacterInput: (show: boolean) => void;
   selectedChars: string;
+  showCharacterInput: boolean;
+  setSelectedFeature: (feature: string) => void;
+  selectedFeature: string;
 }) => (
   <Badge
     variant="outline"
@@ -16,7 +22,8 @@ export const FontCharactersBadge = ({
     mx={10}
     onClick={() => {
       resetBadges();
-      setShowCharacterInput(true);
+      setShowCharacterInput(!showCharacterInput);
+      selectedFeature === 'Characters' ? setSelectedFeature('') : setSelectedFeature('Characters');
     }}
     style={{
       cursor: 'pointer',

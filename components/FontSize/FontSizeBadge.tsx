@@ -4,10 +4,16 @@ export const FontSizeBadge = ({
   resetBadges,
   setShowFontSize,
   selectedFontSize,
+  showFontSize,
+  setSelectedFeature,
+  selectedFeature,
 }: {
   resetBadges: () => void;
   setShowFontSize: (arg: boolean) => void;
   selectedFontSize: number;
+  showFontSize: boolean;
+  setSelectedFeature: (feature: string) => void;
+  selectedFeature: string;
 }) => (
   <Badge
     variant="outline"
@@ -16,7 +22,8 @@ export const FontSizeBadge = ({
     mx={10}
     onClick={() => {
       resetBadges();
-      setShowFontSize(true);
+      setShowFontSize(!showFontSize);
+      selectedFeature === 'Font Size' ? setSelectedFeature('') : setSelectedFeature('Font Size');
     }}
     style={{
       cursor: 'pointer',

@@ -4,10 +4,14 @@ export const BackgroundColorBadge = ({
   resetBadges,
   setShowBackgroundColors,
   showBackgroundColors,
+  setSelectedFeature,
+  selectedFeature,
 }: {
   resetBadges: () => void;
   setShowBackgroundColors: (showColors: boolean) => void;
   showBackgroundColors: boolean;
+  setSelectedFeature: (feature: string) => void;
+  selectedFeature: string;
 }) => (
   <Badge
     size="lg"
@@ -16,6 +20,9 @@ export const BackgroundColorBadge = ({
     onClick={() => {
       resetBadges();
       setShowBackgroundColors(!showBackgroundColors);
+      selectedFeature === 'Background Color'
+        ? setSelectedFeature('')
+        : setSelectedFeature('Background Color');
     }}
     style={{
       cursor: 'pointer',

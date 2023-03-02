@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Container, Flex, useMantineColorScheme } from '@mantine/core';
+import { Container, Flex, useMantineColorScheme, Text } from '@mantine/core';
 import { Fade } from 'react-awesome-reveal';
-import { fontCharacterInputsDefaultValue } from '../constants';
 import {
   FontSizeBadge,
   AsciiImage,
@@ -24,6 +23,9 @@ import {
   QuestionMarkTooltip,
   BackgroundColorBadge,
   BackgroundColorSwatch,
+  // AnimationBadge,
+  AnimationControls,
+  // AnimationSpeedSlider,
 } from '../components';
 
 function MakeItASCII() {
@@ -38,10 +40,13 @@ function MakeItASCII() {
   const [showDownloadOptions, setShowDownloadOptions] = useState(false);
   const [selectedColor, setSelectedColor] = useState(isDark ? '#fff' : '#000');
   const [selectedBackgroundColor, setSelectedBackgroundColor] = useState('');
-  const [selectedChars, setSelectedChars] = useState(fontCharacterInputsDefaultValue);
+  const [selectedChars, setSelectedChars] = useState('');
   const [selectedFontSize, setSelectedFontSize] = useState(14);
   const [selectedFontWeight, setSelectedFontWeight] = useState('bold');
   const [backgroundState, setBackgroundState] = useState('transparent');
+  const [showAnimationControls, setShowAnimationControls] = useState(false);
+  const [animationSpeed, setSetAnimationSpeed] = useState(1000);
+  const [selectedFeature, setSelectedFeature] = useState('');
 
   const selectedFontDefaultValue =
     Number(((Number(selectedFontSize - 8) * 100) / 8).toFixed(2)) || 14;
@@ -63,13 +68,15 @@ function MakeItASCII() {
     setImageUrl('');
     setSelectedColor('');
     setSelectedChars('');
+    setSelectedBackgroundColor('');
+    setSetAnimationSpeed(1000);
     setSelectedFontSize(14);
     setShowCharacterInput(false);
     setShowColors(false);
     setShowFontSize(false);
     setShowDownloadOptions(false);
-    setSelectedBackgroundColor('');
     setShowBackgroundColors(false);
+    setShowAnimationControls(false);
   };
 
   const resetBadges = () => {
@@ -78,51 +85,74 @@ function MakeItASCII() {
     setShowFontSize(false);
     setShowDownloadOptions(false);
     setShowBackgroundColors(false);
+    setShowAnimationControls(false);
   };
 
   return (
     <>
       {/* Features */}
       {imageUrl && (
-        <Flex justify="center" align="center" my={20} h={100}>
-          {showFontSize && (
-            <FontSizeSlider
-              selectedFontDefaultValue={selectedFontDefaultValue}
-              setSelectedFontSize={setSelectedFontSize}
-            />
-          )}
+        <>
+          <Flex justify="center" align="center" my={20} h={100}>
+            <Text
+              fz="xs"
+              style={{
+                marginRight: 10,
+              }}
+            >
+              {selectedFeature && selectedFeature}
+            </Text>
 
-          {showColors && (
-            <FontColorSwatch setSelectedColor={setSelectedColor} setShowColors={setShowColors} />
-          )}
+            {showFontSize && (
+              <FontSizeSlider
+                selectedFontDefaultValue={selectedFontDefaultValue}
+                setSelectedFontSize={setSelectedFontSize}
+              />
+            )}
 
-          {showBackgroundColors && (
-            <BackgroundColorSwatch
-              setSelectedBackgroundColor={setSelectedBackgroundColor}
-              setShowBackgroundColors={setShowBackgroundColors}
-            />
-          )}
+            {showColors && (
+              <FontColorSwatch setSelectedColor={setSelectedColor} setShowColors={setShowColors} />
+            )}
 
-          {showCharacterInput && (
-            <Flex justify="center" align="center">
-              <CharacterInputs setSelectedChars={setSelectedChars} selectedChars={selectedChars} />
-              <BackgroundToggleSwitch
+            {showBackgroundColors && (
+              <BackgroundColorSwatch
+                setSelectedBackgroundColor={setSelectedBackgroundColor}
+                setShowBackgroundColors={setShowBackgroundColors}
+              />
+            )}
+
+            {showCharacterInput && (
+              <Flex justify="center" align="center">
+                <CharacterInputs
+                  setSelectedChars={setSelectedChars}
+                  selectedChars={selectedChars}
+                />
+                <BackgroundToggleSwitch
+                  selectedChars={selectedChars}
+                  backgroundState={backgroundState}
+                  setBackgroundState={setBackgroundState}
+                  setSelectedChars={setSelectedChars}
+                />
+                <QuestionMarkTooltip />
+              </Flex>
+            )}
+            {showDownloadOptions && (
+              <DownloadButtons
+                downloadContentToImage={downloadContentToImage}
+                downloadContentAsText={downloadContentAsText}
+                asciiRef={asciiRef}
+              />
+            )}
+
+            {showAnimationControls && (
+              <AnimationControls
+                setSetAnimationSpeed={setSetAnimationSpeed}
                 selectedChars={selectedChars}
-                backgroundState={backgroundState}
-                setBackgroundState={setBackgroundState}
                 setSelectedChars={setSelectedChars}
               />
-              <QuestionMarkTooltip />
-            </Flex>
-          )}
-          {showDownloadOptions && (
-            <DownloadButtons
-              downloadContentToImage={downloadContentToImage}
-              downloadContentAsText={downloadContentAsText}
-              asciiRef={asciiRef}
-            />
-          )}
-        </Flex>
+            )}
+          </Flex>
+        </>
       )}
 
       {/* Heading */}
@@ -141,12 +171,18 @@ function MakeItASCII() {
               resetBadges={resetBadges}
               setShowCharacterInput={setShowCharacterInput}
               selectedChars={selectedChars}
+              showCharacterInput={showCharacterInput}
+              setSelectedFeature={setSelectedFeature}
+              selectedFeature={selectedFeature}
             />
 
             <FontSizeBadge
               resetBadges={resetBadges}
               setShowFontSize={setShowFontSize}
               selectedFontSize={selectedFontSize}
+              showFontSize={showFontSize}
+              setSelectedFeature={setSelectedFeature}
+              selectedFeature={selectedFeature}
             />
 
             <WeightSizeBadge
@@ -156,10 +192,11 @@ function MakeItASCII() {
             />
 
             <DownloadBadge
-              setShowColors={setShowColors}
-              setShowFontSize={setShowFontSize}
-              setShowCharacterInput={setShowCharacterInput}
               setShowDownloadOptions={setShowDownloadOptions}
+              showDownloadOptions={showDownloadOptions}
+              resetBadges={resetBadges}
+              selectedFeature={selectedFeature}
+              setSelectedFeature={setSelectedFeature}
             />
 
             <ResetBadge handleReset={handleReset} />
@@ -175,13 +212,24 @@ function MakeItASCII() {
             resetBadges={resetBadges}
             setShowColors={setShowColors}
             showColors={showColors}
+            setSelectedFeature={setSelectedFeature}
+            selectedFeature={selectedFeature}
           />
 
           <BackgroundColorBadge
             resetBadges={resetBadges}
             setShowBackgroundColors={setShowBackgroundColors}
             showBackgroundColors={showBackgroundColors}
+            setSelectedFeature={setSelectedFeature}
+            selectedFeature={selectedFeature}
           />
+
+          {/* <AnimationBadge
+            resetBadges={resetBadges}
+            setShowAnimationControls={setShowAnimationControls}
+            showAnimationControls={showAnimationControls}
+            setSelectedFeature={setSelectedFeature}
+          /> */}
         </Flex>
       )}
 

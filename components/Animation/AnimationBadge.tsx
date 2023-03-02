@@ -1,17 +1,15 @@
 import { Badge } from '@mantine/core';
 
-export const FontColorBadge = ({
+export const AnimationBadge = ({
   resetBadges,
-  setShowColors,
-  showColors,
+  setShowAnimationControls,
+  showAnimationControls,
   setSelectedFeature,
-  selectedFeature,
 }: {
   resetBadges: () => void;
-  setShowColors: (showColors: boolean) => void;
-  showColors: boolean;
+  setShowAnimationControls: (value: boolean) => void;
+  showAnimationControls: boolean;
   setSelectedFeature: (feature: string) => void;
-  selectedFeature: string;
 }) => (
   <Badge
     size="lg"
@@ -19,13 +17,13 @@ export const FontColorBadge = ({
     mx={10}
     onClick={() => {
       resetBadges();
-      setShowColors(!showColors);
-      selectedFeature === 'Font Color' ? setSelectedFeature('') : setSelectedFeature('Font Color');
+      setShowAnimationControls(!showAnimationControls);
+      setSelectedFeature('Animation');
     }}
     style={{
       cursor: 'pointer',
     }}
   >
-    Color
+    Animate
   </Badge>
 );

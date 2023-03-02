@@ -1,15 +1,17 @@
 import { Badge } from '@mantine/core';
 
 export const DownloadBadge = ({
-  setShowColors,
-  setShowFontSize,
-  setShowCharacterInput,
   setShowDownloadOptions,
+  showDownloadOptions,
+  resetBadges,
+  selectedFeature,
+  setSelectedFeature,
 }: {
-  setShowColors: (show: boolean) => void;
-  setShowFontSize: (show: boolean) => void;
-  setShowCharacterInput: (show: boolean) => void;
   setShowDownloadOptions: (show: boolean) => void;
+  showDownloadOptions: boolean;
+  resetBadges: () => void;
+  selectedFeature: string;
+  setSelectedFeature: (feature: string) => void;
 }) => (
   <Badge
     variant="outline"
@@ -17,10 +19,9 @@ export const DownloadBadge = ({
     mt={10}
     mx={10}
     onClick={() => {
-      setShowColors(false);
-      setShowFontSize(false);
-      setShowCharacterInput(false);
-      setShowDownloadOptions(true);
+      resetBadges();
+      setShowDownloadOptions(!showDownloadOptions);
+      selectedFeature === 'Download' ? setSelectedFeature('') : setSelectedFeature('Download');
     }}
     style={{
       cursor: 'pointer',

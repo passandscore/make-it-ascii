@@ -6,4 +6,5 @@
 [ ] dimensions
 [ ] handle mime types
 [ ] carousel
-[ ] fixed badge width
+[x] fixed badge width
+[ ] opacity
