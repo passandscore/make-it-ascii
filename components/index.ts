@@ -10,3 +10,4 @@ export * from './BackgroundColor';
 export * from './ImageDropzone';
 export * from './ResetBadge';
 export * from './Reveal';
+export * from './LandingCarousel';

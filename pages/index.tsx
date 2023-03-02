@@ -23,6 +23,7 @@ import {
   RevealBadge,
   RevealModal,
   RevealEffectContainer,
+  ImageCarousel,
 } from '../components';
 
 function MakeItASCII() {
@@ -220,6 +221,9 @@ function MakeItASCII() {
       <Container size="xs" mt="xl">
         <ImageDropzone imageUrl={imageUrl} setImageUrl={setImageUrl} />
       </Container>
+
+      {/* Image Carousel */}
+      {!imageUrl && <ImageCarousel />}
 
       <RevealModal openRevealModal={openRevealModal} setOpenRevealModal={setOpenRevealModal} />
 
