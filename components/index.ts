@@ -1,4 +1,4 @@
-export * from './AsciiImage';
+export * from './Ascii-Image';
 export * from './ColorScheme';
 export * from './Download';
 export * from './FontCharacters';

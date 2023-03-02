@@ -21,6 +21,7 @@ import {
   ImageDropzone,
   ResetBadge,
   RevealBadge,
+  QuestionMarkTooltip,
 } from '../components';
 
 function MakeItASCII() {
@@ -90,6 +91,7 @@ function MakeItASCII() {
                 setBackgroundState={setBackgroundState}
                 setSelectedChars={setSelectedChars}
               />
+              <QuestionMarkTooltip />
             </Flex>
           )}
           {showDownloadOptions && (

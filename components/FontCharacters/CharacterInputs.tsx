@@ -10,7 +10,6 @@ export const CharacterInputs = ({
 }) => (
   <TextInput
     placeholder={fontCharacterInputsDefaultValue}
-    defaultValue={fontCharacterInputsDefaultValue}
     value={selectedChars || fontCharacterInputsDefaultValue}
     onChange={(e) => setSelectedChars(e.currentTarget.value)}
   />

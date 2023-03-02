@@ -13,10 +13,10 @@ export const BackgroundToggleSwitch = ({
 }) => (
   <Switch
     ml={20}
-    label="Add Background"
+    mr={5}
+    label="Background Characters"
     onChange={() => {
       const currentChars = selectedChars.split('');
-      console.log(currentChars);
       if (backgroundState === 'transparent') {
         setBackgroundState('visible');
         currentChars.shift();
