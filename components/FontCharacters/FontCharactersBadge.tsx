@@ -20,6 +20,7 @@ export const FontCharactersBadge = ({
     }}
     style={{
       cursor: 'pointer',
+      width: '8rem',
     }}
   >
     {selectedChars || 'Characters'}

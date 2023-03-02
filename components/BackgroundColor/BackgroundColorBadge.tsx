@@ -1,28 +1,26 @@
 import { Badge } from '@mantine/core';
 
-export const FontSizeBadge = ({
+export const BackgroundColorBadge = ({
   resetBadges,
-  setShowFontSize,
-  selectedFontSize,
+  setShowBackgroundColors,
+  showBackgroundColors,
 }: {
   resetBadges: () => void;
-  setShowFontSize: (arg: boolean) => void;
-  selectedFontSize: number;
+  setShowBackgroundColors: (showColors: boolean) => void;
+  showBackgroundColors: boolean;
 }) => (
   <Badge
-    variant="outline"
     size="lg"
     mt={10}
     mx={10}
     onClick={() => {
       resetBadges();
-      setShowFontSize(true);
+      setShowBackgroundColors(!showBackgroundColors);
     }}
     style={{
       cursor: 'pointer',
-      width: '6rem',
     }}
   >
-    {`${selectedFontSize}px`}
+    Background
   </Badge>
 );

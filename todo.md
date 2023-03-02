@@ -1,8 +1,9 @@
 [ ] reveal feature: Use a modal. 9 options.
 [ ] gif button
-[ ] handle chars better
-[ ] download background color toggle
-[ ] background color
+[x] handle chars better
+[x] download background color toggle
+[x] background color
 [ ] dimensions
 [ ] handle mime types
 [ ] carousel
+[ ] fixed badge width

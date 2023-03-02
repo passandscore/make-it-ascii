@@ -5,7 +5,6 @@ export const ColorSchemeBadge = () => {
 
   return (
     <Badge
-      variant="outline"
       size="lg"
       mt={10}
       mx={10}

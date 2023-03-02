@@ -10,6 +10,7 @@ export const AsciiImage = (props: {
   selectedFontSize?: string;
   selectedFontWeight?: string;
   asciiRef?: any;
+  selectedBackgroundColor?: string;
 }) => {
   const [asciiChars, setAsciiChars] = useState([] as string[]);
 
@@ -45,11 +46,29 @@ export const AsciiImage = (props: {
     image.src = url;
   };
 
+  const handleBackgroundColor = () => {
+    if (props.selectedBackgroundColor) {
+      return props.selectedBackgroundColor;
+    }
+
+    //   if (colorScheme === 'dark') {
+    //     return '#000000';
+    //   }
+
+    return 'transparent';
+  };
+
   useEffect(() => {
     if (props.src) {
       convertToAscii(props.src);
     }
-  }, [props.selectedColor, props.selectedChars, props.selectedFontSize, props.selectedFontWeight]);
+  }, [
+    props.selectedColor,
+    props.selectedChars,
+    props.selectedFontSize,
+    props.selectedFontWeight,
+    props.selectedBackgroundColor,
+  ]);
 
   const ascii = () => asciiChars.join('');
 
@@ -71,6 +90,7 @@ export const AsciiImage = (props: {
           line-height: 0.95em;
           color: ${props.selectedColor || (colorScheme === 'dark' ? '#FFFFFF' : '#000000')};
           font-size: ${props.selectedFontSize}px;
+          background-color: ${handleBackgroundColor()};
         }
         `}
       </style>
@@ -78,5 +98,3 @@ export const AsciiImage = (props: {
     </div>
   );
 };
-
-// background-color: ${colorScheme === 'dark' ? '#000000' : '#FFFFFF'};

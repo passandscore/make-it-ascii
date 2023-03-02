@@ -6,6 +6,7 @@ export * from './FontColor';
 export * from './FontSize';
 export * from './FontWeight';
 export * from './Headings';
+export * from './BackgroundColor';
 export * from './ImageDropzone';
 export * from './ResetBadge';
 export * from './RevealBadge';

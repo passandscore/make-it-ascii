@@ -1,12 +1,12 @@
 import { Flex } from '@mantine/core';
 import { defaultBadgeColor } from '../../constants';
 
-export const FontColorSwatch = ({
-  setSelectedColor,
-  setShowColors,
+export const BackgroundColorSwatch = ({
+  setSelectedBackgroundColor,
+  setShowBackgroundColors,
 }: {
-  setSelectedColor: (color: string) => void;
-  setShowColors: (show: boolean) => void;
+  setSelectedBackgroundColor: (color: string) => void;
+  setShowBackgroundColors: (show: boolean) => void;
 }) => {
   const colors = [
     { name: 'black', hex: '#000000', border: '1px solid #FFFFFF' },
@@ -19,16 +19,18 @@ export const FontColorSwatch = ({
     { name: 'white', hex: '#FFFFFF', border: '1px solid #000000' },
   ];
 
-  const selectedColor = (color: string) => {
+  const selectedBackgroundColor = (color: string) => {
     const noColor = defaultBadgeColor;
-    color === noColor ? setSelectedColor('') : setSelectedColor(color);
-    setShowColors(false);
+    color === noColor ? setSelectedBackgroundColor('') : setSelectedBackgroundColor(color);
+    setShowBackgroundColors(false);
   };
   return (
     <Flex
       justify="space-evenly"
+      px={4}
       style={{
         margin: 2,
+        borderRadius: 40,
       }}
     >
       {colors.map((color) => (
@@ -44,7 +46,7 @@ export const FontColorSwatch = ({
             margin: 8,
             border: color.border || 'none',
           }}
-          onClick={() => selectedColor(color.hex)}
+          onClick={() => selectedBackgroundColor(color.hex)}
         />
       ))}
     </Flex>

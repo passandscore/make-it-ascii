@@ -22,6 +22,8 @@ import {
   ResetBadge,
   RevealBadge,
   QuestionMarkTooltip,
+  BackgroundColorBadge,
+  BackgroundColorSwatch,
 } from '../components';
 
 function MakeItASCII() {
@@ -30,10 +32,12 @@ function MakeItASCII() {
 
   const [imageUrl, setImageUrl] = useState('');
   const [showColors, setShowColors] = useState(false);
+  const [showBackgroundColors, setShowBackgroundColors] = useState(false);
   const [showCharacterInput, setShowCharacterInput] = useState(false);
   const [showFontSize, setShowFontSize] = useState(false);
   const [showDownloadOptions, setShowDownloadOptions] = useState(false);
   const [selectedColor, setSelectedColor] = useState(isDark ? '#fff' : '#000');
+  const [selectedBackgroundColor, setSelectedBackgroundColor] = useState('');
   const [selectedChars, setSelectedChars] = useState(fontCharacterInputsDefaultValue);
   const [selectedFontSize, setSelectedFontSize] = useState(14);
   const [selectedFontWeight, setSelectedFontWeight] = useState('bold');
@@ -45,7 +49,14 @@ function MakeItASCII() {
   const asciiRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    isDark ? setSelectedColor('#fff') : setSelectedColor('#000');
+    if (isDark && !selectedColor) {
+      setSelectedBackgroundColor('#000');
+      return;
+    }
+
+    if (!isDark && !selectedColor) {
+      setSelectedBackgroundColor('#fff');
+    }
   }, [isDark]);
 
   const handleReset = () => {
@@ -57,6 +68,8 @@ function MakeItASCII() {
     setShowColors(false);
     setShowFontSize(false);
     setShowDownloadOptions(false);
+    setSelectedBackgroundColor('');
+    setShowBackgroundColors(false);
   };
 
   const resetBadges = () => {
@@ -64,6 +77,7 @@ function MakeItASCII() {
     setShowColors(false);
     setShowFontSize(false);
     setShowDownloadOptions(false);
+    setShowBackgroundColors(false);
   };
 
   return (
@@ -80,6 +94,13 @@ function MakeItASCII() {
 
           {showColors && (
             <FontColorSwatch setSelectedColor={setSelectedColor} setShowColors={setShowColors} />
+          )}
+
+          {showBackgroundColors && (
+            <BackgroundColorSwatch
+              setSelectedBackgroundColor={setSelectedBackgroundColor}
+              setShowBackgroundColors={setShowBackgroundColors}
+            />
           )}
 
           {showCharacterInput && (
@@ -115,14 +136,7 @@ function MakeItASCII() {
             <ColorSchemeBadge />
           </Flex>
         ) : (
-          <>
-            <FontColorBadge
-              resetBadges={resetBadges}
-              setShowColors={setShowColors}
-              showColors={showColors}
-              selectedColor={selectedColor}
-            />
-
+          <Flex>
             <FontCharactersBadge
               resetBadges={resetBadges}
               setShowCharacterInput={setShowCharacterInput}
@@ -147,10 +161,29 @@ function MakeItASCII() {
               setShowCharacterInput={setShowCharacterInput}
               setShowDownloadOptions={setShowDownloadOptions}
             />
-            {imageUrl && <ResetBadge handleReset={handleReset} />}
-          </>
+
+            <ResetBadge handleReset={handleReset} />
+          </Flex>
         )}
       </Flex>
+
+      {imageUrl && (
+        <Flex justify="center">
+          <ColorSchemeBadge />
+
+          <FontColorBadge
+            resetBadges={resetBadges}
+            setShowColors={setShowColors}
+            showColors={showColors}
+          />
+
+          <BackgroundColorBadge
+            resetBadges={resetBadges}
+            setShowBackgroundColors={setShowBackgroundColors}
+            showBackgroundColors={showBackgroundColors}
+          />
+        </Flex>
+      )}
 
       {/* Image Dropzone */}
       <Container size="xs" mt="xl">
@@ -168,6 +201,7 @@ function MakeItASCII() {
               selectedFontSize={String(selectedFontSize)}
               selectedFontWeight={selectedFontWeight}
               asciiRef={asciiRef}
+              selectedBackgroundColor={selectedBackgroundColor}
             />
           </Container>
         </Fade>
