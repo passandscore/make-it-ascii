@@ -1,6 +1,6 @@
 import { Badge } from '@mantine/core';
 
-const WeightSizeBadge = ({
+export const WeightSizeBadge = ({
   resetBadges,
   setSelectedFontWeight,
   selectedFontWeight,
@@ -28,5 +28,3 @@ const WeightSizeBadge = ({
     weight
   </Badge>
 );
-
-export default WeightSizeBadge;

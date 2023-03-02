@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useMantineColorScheme } from '@mantine/core';
 
-const AsciiImage = (props: {
+export const AsciiImage = (props: {
   src: string;
   selectedColor?: string;
   selectedChars?: string;
@@ -78,7 +78,5 @@ const AsciiImage = (props: {
     </div>
   );
 };
-
-export default AsciiImage;
 
 // background-color: ${colorScheme === 'dark' ? '#000000' : '#FFFFFF'};

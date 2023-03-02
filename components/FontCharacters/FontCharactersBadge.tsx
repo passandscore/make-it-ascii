@@ -1,13 +1,13 @@
 import { Badge } from '@mantine/core';
 
-export const FontSizeBadge = ({
+export const FontCharactersBadge = ({
   resetBadges,
-  setShowFontSize,
-  selectedFontSize,
+  setShowCharacterInput,
+  selectedChars,
 }: {
   resetBadges: () => void;
-  setShowFontSize: (arg: boolean) => void;
-  selectedFontSize: number;
+  setShowCharacterInput: (show: boolean) => void;
+  selectedChars: string;
 }) => (
   <Badge
     variant="outline"
@@ -16,12 +16,12 @@ export const FontSizeBadge = ({
     mx={10}
     onClick={() => {
       resetBadges();
-      setShowFontSize(true);
+      setShowCharacterInput(true);
     }}
     style={{
       cursor: 'pointer',
     }}
   >
-    {`${selectedFontSize}px`}
+    {selectedChars || 'Characters'}
   </Badge>
 );

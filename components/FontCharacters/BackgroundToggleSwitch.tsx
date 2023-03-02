@@ -1,6 +1,6 @@
 import { Switch } from '@mantine/core';
 
-const BackgroundToggleSwitch = ({
+export const BackgroundToggleSwitch = ({
   selectedChars,
   backgroundState,
   setBackgroundState,
@@ -29,5 +29,3 @@ const BackgroundToggleSwitch = ({
     }}
   />
 );
-
-export default BackgroundToggleSwitch;

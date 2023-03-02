@@ -4,15 +4,25 @@ import { IconUpload, IconPhoto, IconX } from '@tabler/icons';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 
 export function ImageDropzone({
-  handleDrop,
   imageUrl,
+  setImageUrl,
 }: {
-  handleDrop: (files: File[]) => void;
   imageUrl: string;
+  setImageUrl: (url: string) => void;
 }) {
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);
 
+  const handleDrop = (files: File[]) => {
+    const file = files[0];
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const link = URL.createObjectURL(files[0]);
+      setImageUrl(link);
+    };
+    reader.readAsDataURL(file);
+  };
   return (
     <>
       {!imageUrl && (

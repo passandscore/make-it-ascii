@@ -1,6 +1,6 @@
 import { Badge } from '@mantine/core';
 
-const DownloadBadge = ({
+export const DownloadBadge = ({
   setShowColors,
   setShowFontSize,
   setShowCharacterInput,
@@ -29,5 +29,3 @@ const DownloadBadge = ({
     download
   </Badge>
 );
-
-export default DownloadBadge;

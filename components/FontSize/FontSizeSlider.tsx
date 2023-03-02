@@ -1,6 +1,6 @@
 import { Slider } from '@mantine/core';
 
-const FontSizeSlider = ({
+export const FontSizeSlider = ({
   selectedFontDefaultValue,
   setSelectedFontSize,
 }: {
@@ -27,5 +27,3 @@ const FontSizeSlider = ({
     }}
   />
 );
-
-export default FontSizeSlider;

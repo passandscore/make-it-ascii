@@ -1,7 +1,7 @@
 import { TextInput } from '@mantine/core';
 import { fontCharacterInputsDefaultValue } from '../../constants';
 
-const CharacterInputs = ({
+export const CharacterInputs = ({
   setSelectedChars,
   selectedChars,
 }: {
@@ -15,5 +15,3 @@ const CharacterInputs = ({
     onChange={(e) => setSelectedChars(e.currentTarget.value)}
   />
 );
-
-export default CharacterInputs;

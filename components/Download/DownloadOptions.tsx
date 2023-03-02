@@ -2,7 +2,7 @@ import { Button } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { IconPhoto, Icon123 } from '@tabler/icons';
 
-const DownloadButtons = ({
+export const DownloadButtons = ({
   downloadContentToImage,
   downloadContentAsText,
   asciiRef,
@@ -54,5 +54,3 @@ const DownloadButtons = ({
     </Button>
   </>
 );
-
-export default DownloadButtons;
