@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Container, Flex, useMantineColorScheme, Text } from '@mantine/core';
-import { Fade } from 'react-awesome-reveal';
+
 import {
   FontSizeBadge,
-  AsciiImage,
   FontColorSwatch,
   DownloadBadge,
   DownloadButtons,
@@ -19,13 +18,12 @@ import {
   downloadContentAsText,
   ImageDropzone,
   ResetBadge,
-  RevealBadge,
   QuestionMarkTooltip,
   BackgroundColorBadge,
   BackgroundColorSwatch,
-  // AnimationBadge,
-  AnimationControls,
-  // AnimationSpeedSlider,
+  RevealBadge,
+  RevealModal,
+  RevealEffectContainer,
 } from '../components';
 
 function MakeItASCII() {
@@ -44,9 +42,8 @@ function MakeItASCII() {
   const [selectedFontSize, setSelectedFontSize] = useState(14);
   const [selectedFontWeight, setSelectedFontWeight] = useState('bold');
   const [backgroundState, setBackgroundState] = useState('transparent');
-  const [showAnimationControls, setShowAnimationControls] = useState(false);
-  const [animationSpeed, setSetAnimationSpeed] = useState(1000);
   const [selectedFeature, setSelectedFeature] = useState('');
+  const [openRevealModal, setOpenRevealModal] = useState<boolean>(false);
 
   const selectedFontDefaultValue =
     Number(((Number(selectedFontSize - 8) * 100) / 8).toFixed(2)) || 14;
@@ -69,14 +66,12 @@ function MakeItASCII() {
     setSelectedColor('');
     setSelectedChars('');
     setSelectedBackgroundColor('');
-    setSetAnimationSpeed(1000);
     setSelectedFontSize(14);
     setShowCharacterInput(false);
     setShowColors(false);
     setShowFontSize(false);
     setShowDownloadOptions(false);
     setShowBackgroundColors(false);
-    setShowAnimationControls(false);
   };
 
   const resetBadges = () => {
@@ -85,7 +80,6 @@ function MakeItASCII() {
     setShowFontSize(false);
     setShowDownloadOptions(false);
     setShowBackgroundColors(false);
-    setShowAnimationControls(false);
   };
 
   return (
@@ -143,14 +137,6 @@ function MakeItASCII() {
                 asciiRef={asciiRef}
               />
             )}
-
-            {showAnimationControls && (
-              <AnimationControls
-                setSetAnimationSpeed={setSetAnimationSpeed}
-                selectedChars={selectedChars}
-                setSelectedChars={setSelectedChars}
-              />
-            )}
           </Flex>
         </>
       )}
@@ -162,7 +148,10 @@ function MakeItASCII() {
       <Flex justify="center">
         {!imageUrl ? (
           <Flex>
-            <RevealBadge setShowColors={setShowColors} showColors={showColors} />
+            <RevealBadge
+              setOpenRevealModal={setOpenRevealModal}
+              openRevealModal={openRevealModal}
+            />
             <ColorSchemeBadge />
           </Flex>
         ) : (
@@ -223,13 +212,6 @@ function MakeItASCII() {
             setSelectedFeature={setSelectedFeature}
             selectedFeature={selectedFeature}
           />
-
-          {/* <AnimationBadge
-            resetBadges={resetBadges}
-            setShowAnimationControls={setShowAnimationControls}
-            showAnimationControls={showAnimationControls}
-            setSelectedFeature={setSelectedFeature}
-          /> */}
         </Flex>
       )}
 
@@ -238,21 +220,19 @@ function MakeItASCII() {
         <ImageDropzone imageUrl={imageUrl} setImageUrl={setImageUrl} />
       </Container>
 
+      <RevealModal openRevealModal={openRevealModal} setOpenRevealModal={setOpenRevealModal} />
+
       {/* ASCII Art Generator */}
       {imageUrl && (
-        <Fade triggerOnce duration={800} delay={800} damping={0.2}>
-          <Container>
-            <AsciiImage
-              src={imageUrl}
-              selectedColor={selectedColor}
-              selectedChars={selectedChars}
-              selectedFontSize={String(selectedFontSize)}
-              selectedFontWeight={selectedFontWeight}
-              asciiRef={asciiRef}
-              selectedBackgroundColor={selectedBackgroundColor}
-            />
-          </Container>
-        </Fade>
+        <RevealEffectContainer
+          src={imageUrl}
+          selectedColor={selectedColor}
+          selectedChars={selectedChars}
+          selectedFontSize={String(selectedFontSize)}
+          selectedFontWeight={selectedFontWeight}
+          asciiRef={asciiRef}
+          selectedBackgroundColor={selectedBackgroundColor}
+        />
       )}
     </>
   );

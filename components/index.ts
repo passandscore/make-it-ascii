@@ -9,5 +9,4 @@ export * from './Headings';
 export * from './BackgroundColor';
 export * from './ImageDropzone';
 export * from './ResetBadge';
-export * from './RevealBadge';
-export * from './Animation';
+export * from './Reveal';
