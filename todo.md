@@ -1,2 +1,0 @@
-[ ] handle mime types
-[ ] carousel
