@@ -9,7 +9,7 @@ export const DownloadButtons = ({
 }: {
   downloadContentToImage: (asciiRef: React.MutableRefObject<HTMLDivElement | null>) => void;
   downloadContentAsText: (asciiRef: React.MutableRefObject<HTMLDivElement | null>) => void;
-  asciiRef: React.MutableRefObject<HTMLDivElement | null>;
+  asciiRef: any;
 }) => (
   <>
     <Button

@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Container, Flex, useMantineColorScheme, Text } from '@mantine/core';
+import React, { useState, useEffect } from 'react';
+import { Container, Flex, useMantineColorScheme, Text, Image } from '@mantine/core';
+import { fontCharacterInputsDefaultValue } from '../constants';
 
 import {
   FontSizeBadge,
@@ -23,11 +24,11 @@ import {
   RevealBadge,
   RevealModal,
   RevealEffectContainer,
-  ImageCarousel,
 } from '../components';
 
 function MakeItASCII() {
   const { colorScheme } = useMantineColorScheme();
+
   const isDark = colorScheme === 'dark';
 
   const [imageUrl, setImageUrl] = useState('');
@@ -38,16 +39,16 @@ function MakeItASCII() {
   const [showDownloadOptions, setShowDownloadOptions] = useState(false);
   const [selectedColor, setSelectedColor] = useState(isDark ? '#fff' : '#000');
   const [selectedBackgroundColor, setSelectedBackgroundColor] = useState('');
-  const [selectedChars, setSelectedChars] = useState('');
+  const [selectedChars, setSelectedChars] = useState(fontCharacterInputsDefaultValue);
   const [selectedFontSize, setSelectedFontSize] = useState(14);
   const [selectedFontWeight, setSelectedFontWeight] = useState('bold');
   const [selectedFeature, setSelectedFeature] = useState('');
   const [openRevealModal, setOpenRevealModal] = useState<boolean>(false);
+  const [hideOnDrag, setHideOnDrag] = useState<boolean>(false);
+  const [selectedRef, setSelectedRef] = useState<React.MutableRefObject<HTMLDivElement | null>>();
 
   const selectedFontDefaultValue =
     Number(((Number(selectedFontSize - 8) * 100) / 8).toFixed(2)) || 14;
-
-  const asciiRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isDark && !selectedColor) {
@@ -135,7 +136,7 @@ function MakeItASCII() {
               <DownloadButtons
                 downloadContentToImage={downloadContentToImage}
                 downloadContentAsText={downloadContentAsText}
-                asciiRef={asciiRef}
+                asciiRef={selectedRef}
               />
             )}
           </Flex>
@@ -143,57 +144,67 @@ function MakeItASCII() {
       )}
 
       {/* Heading */}
-      {!imageUrl && <MakeItAsciiTitle />}
+      {!imageUrl && !openRevealModal && <MakeItAsciiTitle />}
 
       {/* Feature Badges */}
-      <Flex justify="center">
-        {!imageUrl ? (
-          <Flex>
-            <RevealBadge
-              setOpenRevealModal={setOpenRevealModal}
-              openRevealModal={openRevealModal}
-            />
-            <ColorSchemeBadge />
-          </Flex>
-        ) : (
-          <Flex>
-            <FontCharactersBadge
-              resetBadges={resetBadges}
-              setShowCharacterInput={setShowCharacterInput}
-              selectedChars={selectedChars}
-              showCharacterInput={showCharacterInput}
-              setSelectedFeature={setSelectedFeature}
-              selectedFeature={selectedFeature}
-            />
+      {!openRevealModal && (
+        <Flex justify="center">
+          {!imageUrl ? (
+            <Flex
+              style={{
+                position: 'absolute',
+                top: '30%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                display: 'inline-block',
+              }}
+            >
+              <RevealBadge
+                setOpenRevealModal={setOpenRevealModal}
+                openRevealModal={openRevealModal}
+              />
+              <ColorSchemeBadge />
+            </Flex>
+          ) : (
+            <Flex>
+              <FontCharactersBadge
+                resetBadges={resetBadges}
+                setShowCharacterInput={setShowCharacterInput}
+                selectedChars={selectedChars}
+                showCharacterInput={showCharacterInput}
+                setSelectedFeature={setSelectedFeature}
+                selectedFeature={selectedFeature}
+              />
 
-            <FontSizeBadge
-              resetBadges={resetBadges}
-              setShowFontSize={setShowFontSize}
-              selectedFontSize={selectedFontSize}
-              showFontSize={showFontSize}
-              setSelectedFeature={setSelectedFeature}
-              selectedFeature={selectedFeature}
-            />
+              <FontSizeBadge
+                resetBadges={resetBadges}
+                setShowFontSize={setShowFontSize}
+                selectedFontSize={selectedFontSize}
+                showFontSize={showFontSize}
+                setSelectedFeature={setSelectedFeature}
+                selectedFeature={selectedFeature}
+              />
 
-            <WeightSizeBadge
-              resetBadges={resetBadges}
-              setSelectedFontWeight={setSelectedFontWeight}
-              selectedFontWeight={selectedFontWeight}
-              setSelectedFeature={setSelectedFeature}
-            />
+              <WeightSizeBadge
+                resetBadges={resetBadges}
+                setSelectedFontWeight={setSelectedFontWeight}
+                selectedFontWeight={selectedFontWeight}
+                setSelectedFeature={setSelectedFeature}
+              />
 
-            <DownloadBadge
-              setShowDownloadOptions={setShowDownloadOptions}
-              showDownloadOptions={showDownloadOptions}
-              resetBadges={resetBadges}
-              selectedFeature={selectedFeature}
-              setSelectedFeature={setSelectedFeature}
-            />
+              <DownloadBadge
+                setShowDownloadOptions={setShowDownloadOptions}
+                showDownloadOptions={showDownloadOptions}
+                resetBadges={resetBadges}
+                selectedFeature={selectedFeature}
+                setSelectedFeature={setSelectedFeature}
+              />
 
-            <ResetBadge handleReset={handleReset} />
-          </Flex>
-        )}
-      </Flex>
+              <ResetBadge handleReset={handleReset} />
+            </Flex>
+          )}
+        </Flex>
+      )}
 
       {imageUrl && (
         <Flex justify="center">
@@ -218,12 +229,34 @@ function MakeItASCII() {
       )}
 
       {/* Image Dropzone */}
+
       <Container size="xs" mt="xl">
-        <ImageDropzone imageUrl={imageUrl} setImageUrl={setImageUrl} />
+        <ImageDropzone
+          imageUrl={imageUrl}
+          setImageUrl={setImageUrl}
+          setHideOnDrag={setHideOnDrag}
+        />
       </Container>
 
-      {/* Image Carousel */}
-      {!imageUrl && <ImageCarousel />}
+      {/* Image */}
+      {hideOnDrag ||
+        (!imageUrl && (
+          <Flex
+            style={{
+              position: 'absolute',
+              top: '65%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              display: 'inline-block',
+            }}
+          >
+            {isDark ? (
+              <Image src="/images/flashbot-green.png" width={300} height={450} />
+            ) : (
+              <Image src="/images/flashbot-blue.png" width={300} height={450} />
+            )}
+          </Flex>
+        ))}
 
       <RevealModal openRevealModal={openRevealModal} setOpenRevealModal={setOpenRevealModal} />
 
@@ -235,8 +268,8 @@ function MakeItASCII() {
           selectedChars={selectedChars}
           selectedFontSize={String(selectedFontSize)}
           selectedFontWeight={selectedFontWeight}
-          asciiRef={asciiRef}
           selectedBackgroundColor={selectedBackgroundColor}
+          setSelectedRef={setSelectedRef}
         />
       )}
     </>

@@ -51,9 +51,9 @@ export const AsciiImage = (props: {
       return props.selectedBackgroundColor;
     }
 
-    //   if (colorScheme === 'dark') {
-    //     return '#000000';
-    //   }
+    if (colorScheme === 'dark') {
+      return '#000000';
+    }
 
     return 'transparent';
   };

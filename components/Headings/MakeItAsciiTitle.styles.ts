@@ -7,7 +7,7 @@ export default createStyles((theme) => ({
     fontWeight: 900,
     letterSpacing: -2,
 
-    [theme.fn.smallerThan('md')]: {
+    [theme.fn.smallerThan('lg')]: {
       fontSize: 50,
     },
   },

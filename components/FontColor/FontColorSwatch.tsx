@@ -11,7 +11,7 @@ export const FontColorSwatch = ({
   setSelectedFeature: (feature: string) => void;
 }) => {
   const colors = [
-    { name: 'black', hex: '#000000', border: '1px solid #FFFFFF' },
+    { name: 'black', hex: '#1A1B1E', border: '1px solid #FFFFFF' },
     { name: 'red', hex: '#ff0000' },
     { name: 'green', hex: '#00ff00' },
     { name: 'blue', hex: '#0000ff' },

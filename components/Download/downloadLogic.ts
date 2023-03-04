@@ -1,26 +1,14 @@
-import html2canvas from 'html2canvas';
+import * as htmlToImage from 'html-to-image';
 
 export const downloadContentToImage = (asciiRef: React.MutableRefObject<HTMLDivElement | null>) => {
   // Capture the content to be downloaded
   const asciiContent = asciiRef && asciiRef?.current;
 
-  // Determine the height of the content
-  const height = asciiContent?.offsetHeight;
-
-  // Use html2canvas to render the content as an image
-  html2canvas(asciiContent!, { height }).then((canvas) => {
-    // Convert the final canvas to a data URL
-    const dataURL = canvas.toDataURL();
-
-    // Create a download link for the image
+  htmlToImage.toJpeg(asciiContent!, { quality: 0.95 }).then((dataUrl) => {
     const link = document.createElement('a');
-    link.download = 'download.png';
-    link.href = dataURL;
-
-    // Click the download link to initiate the download
-    document.body.appendChild(link);
+    link.download = 'my-image-name.jpeg';
+    link.href = dataUrl;
     link.click();
-    document.body.removeChild(link);
   });
 };
 

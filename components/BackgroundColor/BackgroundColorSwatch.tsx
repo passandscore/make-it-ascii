@@ -11,7 +11,7 @@ export const BackgroundColorSwatch = ({
   setSelectedFeature: (feature: string) => void;
 }) => {
   const colors = [
-    { name: 'black', hex: '#000000', border: '1px solid #FFFFFF' },
+    { name: 'black', hex: '#1A1B1E', border: '1px solid #FFFFFF' },
     { name: 'red', hex: '#ff0000' },
     { name: 'green', hex: '#00ff00' },
     { name: 'blue', hex: '#0000ff' },
@@ -19,6 +19,7 @@ export const BackgroundColorSwatch = ({
     { name: 'cyan', hex: '#00ffff' },
     { name: 'magenta', hex: '#ff00ff' },
     { name: 'white', hex: '#FFFFFF', border: '1px solid #000000' },
+    { name: 'transparent', hex: 'transparent', backgroundImage: 'url(images/transparent-bg.jpeg)' },
   ];
 
   const selectedBackgroundColor = (color: string) => {
@@ -48,6 +49,7 @@ export const BackgroundColorSwatch = ({
             cursor: 'pointer',
             margin: 8,
             border: color.border || 'none',
+            backgroundImage: color.backgroundImage || 'none',
           }}
           onClick={() => selectedBackgroundColor(color.hex)}
         />

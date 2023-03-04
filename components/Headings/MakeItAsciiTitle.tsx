@@ -5,11 +5,23 @@ export const MakeItAsciiTitle = () => {
   const { classes } = useStyles();
 
   return (
-    <Title className={classes.title} align="center" mt={100}>
-      Make it{' '}
-      <Text inherit variant="gradient" component="span">
-        ASCII
-      </Text>
-    </Title>
+    <div
+      style={{
+        position: 'absolute',
+        top: '20%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        display: 'inline-block',
+        textAlign: 'center',
+        maxWidth: '100%',
+      }}
+    >
+      <Title className={classes.title} align="center">
+        Make it{' '}
+        <Text inherit variant="gradient" component="span">
+          ASCII
+        </Text>
+      </Title>
+    </div>
   );
 };
